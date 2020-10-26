@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>STak.Interop.Shared</AssemblyName>
+    <RootNamespace>STak.Interop.Shared</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="MessagePackAnalyzer" Version="2.2.60" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.0-rc.2.20475.17" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="5.0.0-rc.2.20475.17" />
+    <PackageReference Include="NodaTime" Version="3.0.1" />
+    <PackageReference Include="NodaTime.Serialization.JsonNet" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Engine\Core\TakEngine.csproj" />
+  </ItemGroup>
+
+</Project>

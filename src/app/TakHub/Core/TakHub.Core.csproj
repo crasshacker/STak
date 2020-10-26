@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>STak.TakHub.Core</AssemblyName>
+    <RootNamespace>STak.TakHub.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="autofac" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0-rc.2.20475.6" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\Engine\Actors\TakEngine.Actors.csproj" />
+    <ProjectReference Include="..\..\..\lib\Engine\Core\TakEngine.csproj" />
+    <ProjectReference Include="..\..\..\lib\Interop\Shared\Interop.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

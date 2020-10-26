@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>STak.TakEngine</AssemblyName>
+    <RootNamespace>STak.TakEngine</RootNamespace>
+    <Version>1.0.0-alpha.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>STak.TakEngine</PackageId>
+    <Title>STak.TakEngine</Title>
+    <Company>Sandcastlewich Software</Company>
+    <Authors>Scott Southard</Authors>
+    <Copyright>Copyright â¬â 2020 Scott Southard</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/crasshacker/STak-TakEngine</RepositoryUrl>
+    <!-- <RepositoryBranch>TODO</RepositoryBranch> -->
+    <!-- <RepositoryCommit>TODO</RepositoryCommit> -->
+    <Description>
+      Implementation of the Tak board game, with game rule enforcement, PTN parsing/formatting, game state change
+      notifications, etc.  Includes support for AI players, including a built-in AI and a plugin framework for loading
+      additional AIs at runtime.  A high performance parallel Minimax tree searcher with alpha/beta pruning is used to
+      enable fast AI move evaluation.
+    </Description>
+    <PackageTags>Tak Board Game</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NO_DEBUG_BITBOARD</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0-*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="NLog" Version="4.7.5" />
+  </ItemGroup>
+
+</Project>

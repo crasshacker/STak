@@ -1,0 +1,55 @@
+{
+    "constants" :
+    {
+        "capBaseHalfExtent"   : 300,
+        "capTopHalfExtent"    : 210,
+        "capStoneHeight"      : 800
+    },
+
+    "vertices" :
+    [
+       [ "-capBaseHalfExtent", 0,                "-capBaseHalfExtent" ],  // 0: left  rear bottom
+       [  "capBaseHalfExtent", 0,                "-capBaseHalfExtent" ],  // 1: right rear bottom
+       [ "-capBaseHalfExtent", 0,                 "capBaseHalfExtent" ],  // 2: left  front bottom
+       [  "capBaseHalfExtent", 0,                 "capBaseHalfExtent" ],  // 3: right front bottom
+
+       [ "-capTopHalfExtent",  "capStoneHeight", "-capTopHalfExtent"  ],  // 4: left  rear top
+       [  "capTopHalfExtent",  "capStoneHeight", "-capTopHalfExtent"  ],  // 5: right rear top
+       [ "-capTopHalfExtent",  "capStoneHeight",  "capTopHalfExtent"  ],  // 6: left  front top
+       [  "capTopHalfExtent",  "capStoneHeight",  "capTopHalfExtent"  ]   // 7: right front top
+    ],
+
+    "triangles" :
+    [
+        [ 0, 1, 3 ],  // bottom
+        [ 0, 3, 2 ],
+
+        [ 0, 4, 1 ],  // rear
+        [ 1, 4, 5 ],
+
+        [ 2, 3, 7 ],  // front
+        [ 2, 7, 6 ],
+
+        [ 0, 2, 6 ],  // left
+        [ 0, 6, 4 ],
+
+        [ 1, 5, 7 ],  // right
+        [ 1, 7, 3 ],
+
+        [ 5, 4, 6 ],  // top
+        [ 5, 6, 7 ]
+    ],
+
+    "textureMap" :
+    [
+        [ 0.0, 0.0 ],
+        [ 1.0, 0.0 ],
+        [ 0.0, 1.0 ],
+        [ 1.0, 1.0 ],
+
+        [ 0.3, 0.3 ],
+        [ 0.7, 0.3 ],
+        [ 0.3, 0.7 ],
+        [ 0.7, 0.7 ]
+    ]
+}

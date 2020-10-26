@@ -1,0 +1,26 @@
+{
+    "signalR" :
+    {
+        //
+        // protocol
+        //
+        // The protocol to be used in WinTak-to-TakHub SignalR communications.  Options are "SystemTextJson",
+        // "NewtonsoftJson", and "MessagePack".
+        //
+        "protocol" : "MessagePack",
+
+        //
+        // serveerTimeout
+        //
+        // The amount of time a TakHub connection can be idle before timing out and closing.
+        //
+        "serverTimeout" : "1:00:00",
+
+        //
+        // autoReconnect
+        //
+        // If true, automatic reconnection will be attempted when a connection fails.  Not yet working; do not use.
+        //
+        "autoReconnect" : false
+    }
+}

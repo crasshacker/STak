@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>ExperimentalTakAI</AssemblyName>
+    <RootNamespace>STak.TakEngine.ExperimentalTakAI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\Engine\Core\TakEngine.csproj" />
+  </ItemGroup>
+
+</Project>

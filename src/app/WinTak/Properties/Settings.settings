@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="STak.WinTak.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="BackgroundColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FF002D64</Value>
+    </Setting>
+    <Setting Name="BoardTextureFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Board.jpg</Value>
+    </Setting>
+    <Setting Name="P1StoneTextureFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Player1Stone.jpg</Value>
+    </Setting>
+    <Setting Name="P2StoneTextureFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Player2Stone.jpg</Value>
+    </Setting>
+    <Setting Name="WindowRect" Type="System.Windows.Rect" Scope="User">
+      <Value Profile="(Default)">0,0,0,0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>STak.ActorHost</AssemblyName>
+    <RootNamespace>STak.ActorHost</RootNamespace>
+  </PropertyGroup>
+
+  <!--
+  <ItemGroup>
+    <Reference Include="Akka">
+      <HintPath>..\packages\ThirdParty\Akka.dll</HintPath>
+    </Reference>
+    <Reference Include="Akka.Remote">
+      <HintPath>..\packages\ThirdParty\Akka.Remote.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  -->
+
+  <ItemGroup>
+    <PackageReference Include="Akka" Version="1.4.10" />
+    <PackageReference Include="Akka.Remote" Version="1.4.10" />
+    <PackageReference Include="Akka.Logger.NLog" Version="1.4.5" />
+    <PackageReference Include="NLog" Version="4.7.5" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0-rc.2.20475.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\Engine\Actors\TakEngine.Actors.csproj" />
+    <ProjectReference Include="..\..\lib\Engine\Core\TakEngine.csproj" />
+    <ProjectReference Include="..\..\lib\Interop\Shared\Interop.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.hocon">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

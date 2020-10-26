@@ -1,0 +1,42 @@
+{
+    "constants" :
+    {
+        "gridLineWidth"   :   10.0, // NOTE: The width MUST be the X-axis extent.
+        "gridLineHeight"  :    7.0,
+        "gridLineLength"  : 1000.0
+    },
+
+    "vertices" :
+    [
+        [               0,                0,                0 ], // left  rear bottom
+        [ "gridLineWidth",                0,                0 ], // right rear bottom
+        [               0, "gridLineHeight",                0 ], // left  rear top
+        [ "gridLineWidth", "gridLineHeight",                0 ], // right rear top
+
+        [               0,                0, "gridLineLength" ], // left  front bottom
+        [ "gridLineWidth",                0, "gridLineLength" ], // right front bottom
+        [               0, "gridLineHeight", "gridLineLength" ], // left  front top
+        [ "gridLineWidth", "gridLineHeight", "gridLineLength" ]  // right front top
+    ],
+
+    "triangles" :
+    [
+        [ 0, 3, 1 ], // rear bottom
+        [ 0, 2, 3 ], // rear top
+
+        [ 4, 5, 7 ], // front bottom
+        [ 4, 7, 6 ], // front top
+
+        [ 0, 4, 6 ], // left bottom
+        [ 0, 6, 2 ], // left top
+
+        [ 5, 1, 3 ], // right bottom
+        [ 5, 3, 7 ], // right top
+
+        [ 2, 6, 7 ], // top left
+        [ 2, 7, 3 ], // top right
+
+        [ 0, 1, 5 ], // bottom left
+        [ 0, 5, 4 ]  // bottom right
+    ]
+}

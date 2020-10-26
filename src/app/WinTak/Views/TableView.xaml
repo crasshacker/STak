@@ -1,0 +1,106 @@
+<UserControl x:Class="STak.WinTak.TableView" x:Name="GameTable"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:local="clr-namespace:STak.WinTak"
+            Loaded="LoadedHandler">
+
+    <Grid>
+        <Border Background="White">
+            <Grid x:Name="m_tableViewBackground" Background="Blue">
+
+                <Viewport3D x:Name="m_tableViewport" ClipToBounds="False" RenderOptions.EdgeMode="Unspecified">
+                    <Viewport3D.Camera>
+                        <PerspectiveCamera x:Name="m_tableCamera" Position="1000 1500 2500"
+                                            LookDirection="-10 -15 -25" UpDirection="0 1 0" />
+                    </Viewport3D.Camera>
+
+                    <!--
+                      == The table model *MUST* be the first child of the viewport, and it *MUST* define a collection
+                      == of transformations containing scale, rotate, and translate transforms in that order.  This is
+                      == required in order for the trackball code (see Trackball.cs) to work properly.
+                      -->
+                    <ModelVisual3D x:Name="m_tableVisual">
+                        <ModelVisual3D.Transform>
+                            <Transform3DGroup>
+                                <Transform3DGroup.Children>
+                                    <Transform3DCollection>
+                                        <ScaleTransform3D ScaleX="1" ScaleY="1" ScaleZ="1" />
+                                        <RotateTransform3D>
+                                            <RotateTransform3D.Rotation>
+                                                <AxisAngleRotation3D Axis="0 1 0" Angle="0" />
+                                            </RotateTransform3D.Rotation>
+                                        </RotateTransform3D>
+                                        <TranslateTransform3D OffsetX="0" OffsetY="0" OffsetZ="0" />
+                                    </Transform3DCollection>
+                                </Transform3DGroup.Children>
+                            </Transform3DGroup>
+                        </ModelVisual3D.Transform>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup x:Name="m_tableGroup">
+                                <!-- Implemented in code -->
+                            <Model3DGroup>
+                                <AmbientLight Color="White"/>
+                            </Model3DGroup>
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+
+                    <ModelVisual3D x:Name="m_lightModel">
+                        <ModelVisual3D.Content>
+                            <Model3DGroup x:Name="m_lightGroup">
+                                <!-- Implemented in code -->
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+
+                </Viewport3D>
+
+                <Canvas Background="Transparent">
+                    <TextBlock x:Name="m_infoOverlay" FontSize="18" Foreground="White" Visibility="Hidden">
+                    </TextBlock>
+                </Canvas>
+
+                <Grid x:Name="m_tableOverlay">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <local:JumpSlider Grid.Column="0" x:Name="m_undoRedoSlider" Margin="25" MinWidth="200" Width="200"
+                        Maximum="1" IsMoveToPointEnabled="true" IsSnapToTickEnabled="true" TickPlacement="BottomRight"
+                               TickFrequency="1" Value="0" AutoToolTipPlacement="TopLeft" AutoToolTipFormat="Move {0}"
+                               IsEnabled="true" SmallChange="1" LargeChange="1" ValueChanged="OnUndoRedoSliderChanged">
+                    </local:JumpSlider>
+
+                    <FlowDocumentScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Hidden"
+                                                                VerticalScrollBarVisibility="Hidden">
+                        <FlowDocument TextAlignment="Center">
+                            <Paragraph Foreground="White">
+                                <Run x:Name="m_playerOne" FontSize="1">PlayerOne</Run>
+                                <InlineUIContainer>
+                                    <TextBlock Margin="5,0" x:Name="m_connector" FontSize="1">vs.</TextBlock>
+                                </InlineUIContainer>
+                                <Run x:Name="m_playerTwo" FontSize="1">PlayerTwo</Run>
+                            </Paragraph>
+                            <Paragraph Foreground="White">
+                                <Run x:Name="m_bannerText" FontSize="1"></Run>
+                            </Paragraph>
+                        </FlowDocument>
+                    </FlowDocumentScrollViewer>
+
+                    <Slider Grid.Column="2" x:Name="m_animationSpeed" Margin="25" MinWidth="200" Width="200" Maximum="100"
+                                      TickPlacement="BottomRight" TickFrequency="10" Value="50" IsDirectionReversed="true"
+                                                        IsMoveToPointEnabled="true" ValueChanged="OnAnimationSpeedChanged">
+                    </Slider>
+                </Grid>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,101 @@
+{
+    "constants" :
+    {
+        "flatStoneHalfExtent" : 500,
+        "flatStoneHeight"     : 200,
+        "flatBaseHalfExtent"  : 300,
+        "flatTopBevelHeight"  : 180,
+        "flatBaseBevelHeight" :  10
+    },
+
+    "vertices" :
+    [
+       [ "-flatBaseHalfExtent",  0,                     "-flatBaseHalfExtent"  ],  //  0: left  rear bottom
+       [  "flatBaseHalfExtent",  0,                     "-flatBaseHalfExtent"  ],  //  1: right rear bottom
+       [ "-flatBaseHalfExtent",  0,                      "flatBaseHalfExtent"  ],  //  2: left  front bottom
+       [  "flatBaseHalfExtent",  0,                      "flatBaseHalfExtent"  ],  //  3: right front bottom
+
+       [ "-flatStoneHalfExtent", "flatBaseBevelHeight", "-flatStoneHalfExtent" ],  //  4: left  rear base bevel
+       [  "flatStoneHalfExtent", "flatBaseBevelHeight", "-flatStoneHalfExtent" ],  //  5: right rear base bevel
+       [ "-flatStoneHalfExtent", "flatBaseBevelHeight",  "flatStoneHalfExtent" ],  //  6: left  front base bevel
+       [  "flatStoneHalfExtent", "flatBaseBevelHeight",  "flatStoneHalfExtent" ],  //  7: right front base bevel
+
+       [ "-flatStoneHalfExtent", "flatTopBevelHeight",  "-flatStoneHalfExtent" ],  //  8: left  rear top bevel
+       [  "flatStoneHalfExtent", "flatTopBevelHeight",  "-flatStoneHalfExtent" ],  //  9: right rear top bevel
+       [ "-flatStoneHalfExtent", "flatTopBevelHeight",   "flatStoneHalfExtent" ],  // 10: left  front top bevel
+       [  "flatStoneHalfExtent", "flatTopBevelHeight",   "flatStoneHalfExtent" ],  // 11: right front top bevel
+
+       [ "-flatBaseHalfExtent",  "flatStoneHeight",     "-flatBaseHalfExtent"  ],  // 12: left  rear top
+       [  "flatBaseHalfExtent",  "flatStoneHeight",     "-flatBaseHalfExtent"  ],  // 13: right rear top
+       [ "-flatBaseHalfExtent",  "flatStoneHeight",      "flatBaseHalfExtent"  ],  // 14: left  front top
+       [  "flatBaseHalfExtent",  "flatStoneHeight",      "flatBaseHalfExtent"  ]   // 15: right front top
+    ],
+
+    "triangles" :
+    [
+       [  0,  1,  3 ],  // bottom
+       [  0,  3,  2 ],
+
+       [  0,  4,  5 ],  // rear base bevel
+       [  0,  5,  1 ],
+
+       [  7,  6,  2 ],  // front base bevel
+       [  7,  2,  3 ],
+
+       [  0,  2,  6 ],  // left base bevel
+       [  0,  6,  4 ],
+
+       [  1,  5,  7 ],  // right base bevel
+       [  1,  7,  3 ],
+
+       [  4,  8,  9 ],  // rear
+       [  4,  9,  5 ],
+
+       [  6,  7, 11 ],  // front
+       [  6, 11, 10 ],
+
+       [  4,  6, 10 ],  // left side
+       [  4, 10,  8 ],
+
+       [  7,  5,  9 ],  // right side
+       [  7,  9, 11 ],
+
+       [  9,  8, 12 ],  // rear top bevel
+       [  9, 12, 13 ],
+
+       [ 10, 11, 15 ],  // front top bevel
+       [ 10, 15, 14 ],
+
+       [  8, 10, 14 ],  // left top bevel
+       [  8, 14, 12 ],
+
+       [ 11,  9, 13 ],  // right top bevel
+       [ 11, 13, 15 ],
+
+       [ 12, 14, 15 ],  // top
+       [ 12, 15, 13 ]
+    ],
+
+    "textureMap" :
+    [
+        [ 0.0, 0.0 ],
+        [ 1.0, 0.0 ],
+        [ 0.0, 1.0 ],
+        [ 1.0, 1.0 ],
+
+        [ 0.1, 0.1 ],
+        [ 0.9, 0.1 ],
+        [ 0.1, 0.9 ],
+        [ 0.9, 0.9 ],
+
+        [ 0.3, 0.3 ],
+        [ 0.7, 0.3 ],
+        [ 0.3, 0.7 ],
+        [ 0.7, 0.7 ],
+
+        [ 0.4, 0.4 ],
+        [ 0.6, 0.4 ],
+        [ 0.4, 0.6 ],
+        [ 0.6, 0.6 ]
+    ]
+}

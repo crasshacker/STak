@@ -1,0 +1,45 @@
+akka
+{
+  # loggers = ["Akka.Logger.NLog.NLogLogger, Akka.Logger.NLog"]
+
+    log-config-on-start = on
+    log-dead-letters = on
+    loglevel = "DEBUG"
+
+    actor
+    {
+        provider = remote
+
+        debug
+        {
+            fsm = on
+            receive = on
+            autoreceive = on
+            lifecycle = on
+            event-stream = on
+            unhandled = on
+            router-misconfiguration = on
+        }
+    }
+
+    remote
+    {
+        dot-netty.tcp
+        {
+            port = 49152
+            hostname = localhost
+        }
+    }
+
+    serializers
+    {
+        json  = "Akka.Serialization.NewtonSoftJsonSerializer"
+        bytes = "Akka.Serialization.ByteArraySerializer"
+    }
+
+    serialization-bindings
+    {
+        "System.Byte[]" = bytes
+        "System.Object" = json
+    }
+}

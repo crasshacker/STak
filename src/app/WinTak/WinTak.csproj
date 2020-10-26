@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon>Resources\Images\Icons\MediumBoard.ico</ApplicationIcon>
+    <AssemblyName>WinTak</AssemblyName>
+    <RootNamespace>STak.WinTak</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>NU1701</NoWarn>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="ConnectionStatusWindow.xaml" />
+    <None Remove="HubConnectDialog.xaml" />
+    <None Remove="InviteGameDialog.xaml" />
+    <None Remove="TakHubWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.94" />
+    <PackageReference Include="NodaTime" Version="3.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\Engine\Core\TakEngine.csproj" />
+    <ProjectReference Include="..\..\lib\Engine\Actors\TakEngine.Actors.csproj" />
+    <ProjectReference Include="..\..\lib\Engine\Management\TakEngine.Management.csproj" />
+    <ProjectReference Include="..\..\lib\Interop\Client\Interop.Client.csproj" />
+    <ProjectReference Include="..\..\lib\Interop\Shared\Interop.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="3DTools">
+      <HintPath>..\..\dlls\3DTools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="StickyWindows">
+      <HintPath>..\..\dlls\StickyWindows.dll</HintPath>
+    </Reference>
+    <Reference Include="StickyWindows.WPF">
+      <HintPath>..\..\dlls\StickyWindows.WPF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(ProjectDir)Resources\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Images\Icons\MediumBoard.ico" />
+    <None Remove="Resources\Images\Icons\MediumBoard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\MediumBoard.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\Icons\MediumBoard.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="WinTak.hocon">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="pwsh -nologo -noprofile -noninteractive -command &quot;$(ProjectDir)..\..\..\Tools\Scripts\PostBuild.ps1&quot; -Config &quot;$(Configuration)&quot; -Project WinTak -TargetFramework &quot;$(TargetFramework)&quot;" />
+  </Target>
+</Project>

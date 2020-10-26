@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="STak.WinTak.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:STak.WinTak"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="m_chatBox" Grid.Row="0" FontSize="16" VerticalAlignment="Stretch" TextWrapping="Wrap"
+                                              VerticalScrollBarVisibility="Auto" IsReadOnly="True" Padding="1">
+            To chat with other players, type a message below and hit the Enter key.  By default, messages are sent
+            to everyone at your table.  To send a message to specific hub users, preface the message with their
+            usernames separated by commas, followed by two colons (e.g., "Fred, Wilma :: Hey, it's me, Barney!").
+            Spaces can be put between the names and before and after the colons, but the two colons must be
+            immediately adjacent to one another.
+        </TextBox>
+
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" BorderThickness="1,1,0,1" FontSize="16" FontWeight="SemiBold" Height="22" IsReadOnly = "True">&gt; </TextBox>
+            <TextBox Grid.Column="1" x:Name="m_inputBox" FontSize="16" FontWeight="SemiBold" Height="22"
+                                  BorderThickness="0,1,1,1" MinLines="1" MaxLines="1" TextWrapping="Wrap" Padding="1"
+                                         VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+        </Grid>
+    </Grid>
+</UserControl>

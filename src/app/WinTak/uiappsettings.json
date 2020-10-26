@@ -1,0 +1,833 @@
+{
+    //
+    // !!! WARNING - Be very careful when editing; invalid syntax or values will render WinTak inoperable. !!!
+    //
+    // This file defines a number of configuration options that control various aspects of WinTak's behavior.
+    // The file is in JSON (JavaScript Object Notation) format, and must contain syntactically valid JSON or
+    // WinTak will not behave properly (and will almost certainly crash).  In addition, the values assigned to
+    // the various configuration options must be of the correct type (integer, string, Boolean, etc.) and have
+    // values that are acceptable for those options.
+    //
+    // Note: Unless otherwise indicated, all time-related values are integers representing milliseconds.
+    //
+
+    //
+    // autoReload
+    //
+    // If true, changes to configuration settings take effect at the start of the next turn.  If false,
+    // configuration settings are loaded only at application startup, and changes to the configuration
+    // do not take effect until the next time the application is run.  Disabling dynamic configuration
+    // updates (i.e., setting this value to false) improves performance slightly, but almost certainly
+    // not enough to be noticed.
+    //
+    "autoReload" : true,
+
+    "nlog" :
+    {
+        //
+        // targets
+        //
+        // Specifies the logging targets.  Here we specify the pathname of the log file to write to, along with
+        // the message template to be used when writing log messages.
+        //
+        "targets" :
+        {
+            "logFile" :
+            {
+                "type"     : "File",
+                "fileName" : "${basedir}/WinTak-${shortdate}.log",
+                "layout"   : "${longdate} [${processid}] ${level:uppercase=true} ${logger:shortName=true} - ${message}"
+            }
+        },
+
+        //
+        // rules
+        //
+        // These are the rules used to determine which log messages are written to the configured logging targets,
+        // along with the minimum level of messages to be written to each target.
+        //
+        "rules" :
+        [
+            {
+                "logger"   : "*",
+                "minLevel" : "Warn",
+                "writeTo"  : "logFile"
+            }
+        ]
+    },
+
+    "framework" :
+    {
+        //
+        // useMirroringGame
+        //
+        // If true, WinTak creates a second game object as a sort of cache, and whenever a move is made in
+        // the actual game, it is mirrored on this mirrored game.  This allows game state queries to be
+        // answered locally using the mirror game rather than having to make remote calls to the real game
+        // running on a TakHub server, or to an actor-based game.
+        //
+        // In the case of a local human vs. AI game, setting this to false will improve performance ever so
+        // slightly, but almost certainly not enough to notice.  Leaving this value set to true is recommended.
+        //
+        "useMirroringGame" : true,
+
+        //
+        // useActorSystem
+        //
+        // If true, games are implemented using Akka.NET actors, otherwise they are not.  This is intended for
+        // possible use by the TakHub server, in order to host games in a separate process than the TakHub server
+        // itself (or on a different computer or computers altogether).  This option is only supported by WinTak
+        // to aid in debugging the actor code; it should generally not be changed from the default of false.
+        //
+        "useActorSystem" : false,
+
+        //
+        // actorSystemAddress
+        //
+        // If useActorSystem is true, game instances are encapsulated within actors that communicate via message
+        // passing.  By default the actors are hosted by an actor system running within WinTak itself.  However,
+        // they can be hosted in a different process or on a different machine altogether, by running a suitable
+        // game actor hosting application and pointing actorSystemAddress to the actor system running within it.
+        //
+        "actorSystemAddress" : null     // Example: "akka.tcp://takgamehost@localhost:49152"
+    },
+
+    "behavior" :
+    {
+        //
+        // allowUnsafeOperations
+        //
+        // This setting enables execution of operations that aren't known to be safe.  In particular it allows the
+        // New Game, Open Game, Save Game (As...) menu items to be used at any time, rather than only when it is the
+        // player's turn to make a move or the player is kibitzing a remote game (or a local AI vs. AI game).  This
+        // is primarily intended to be enabled during development, for example to save a game that has gotten into
+        // a hung state of some sort for later analysis.
+        //
+        // NOTE: The probability that executing an unsafe operation will actually cause WinTak to misbehave is very
+        //       low; for this reason, this setting is currently enabled by default.
+        //
+        "allowUnsafeOperations" : true,
+
+        //
+        // useVerbosePtnNotation
+        //
+        // This setting determine whether, when saving a game to a PTN file, verbose notation is used for moves.
+        // This means, for example, including the flat stone "F" indicator or a stone count even when not strictly
+        // necessary according to the PTN specification.
+        //
+        // NOTE: Due to limitations in the manner in which stacks are implemented we don't always know the
+        // type of the top stone; we lose that information after the move has executed.  So the stone type
+        // is not included at the end of a stack move even if useVerbosePtnNotation is true.  This issue could be
+        // resolved by enhancing the stack code, but the benefit would seem to outweigh the cost (unless someone
+        // can point to a case where a fix to this issue would solve an actual problem in the real world).
+        //
+        "useVerbosePtnNotation" : false,
+
+        //
+        // detachGameUponCompletion
+        //
+        // Indicates whether the player should be detached from the game after it completes.  Detaching
+        // results in no immediately obvious behavioral difference; rather, it comes into play if you
+        // rewind the game (partially or fully) by undoing moves.  In a detached game you can play even
+        // after undoing moves, allowing you (for example) to try different strategies during the endgame.
+        // Note that detaching from a TakHub game disconnects you from the remote game, and the opponent
+        // is replaced by a local human.  Valid values are:
+        //
+        // "off"     - Don't detach games upon completion.
+        // "on"      - Detach all games upon completion.
+        // "local"   - Detach only local (WinTak) games.
+        // "remote"  - Detach only remote (TakHub) games.
+        //
+        "detachGameUponCompletion" : "off"
+    },
+
+    "moveTracking" :
+    {
+        //
+        // notificationInterval
+        //
+        // The number of milliseconds between mouse tracking updates sent in remote games.  The optimal value for
+        // this setting depends on the quality of the network connection to TakHub.  On a good connection with low
+        // latency a smaller notificationInterval will tend to yield better performance, while connections with high
+        // latency will generally do better with a higher notificationInterval.
+        //
+        // NOTE: Currently the mouse tracking messages sent by WinTak to TakHub are forwarded to your opponent at
+        //       the same rate as they are received by TakHub, and your opponents tracking messages are forwarded
+        //       to you at the rate specified in her configuration.  (This is undesirable behavior, and I plan to
+        //       change it.)
+        //
+        "notificationInterval" : 60,
+
+        //
+        // stoneHighlightingZone
+        //
+        // The value by which the board cell size (length of one side) is multiplied, to get a square
+        // (presumably smaller than the cell itself) that serves as the "hit zone" for a stone stack
+        // being carried.  If the center of a carried stack is contained in the square, the stack is
+        // highlighted, indicating that it can be dropped onto the cell.
+        //
+        "stoneHighlightingZone" : 0.375,
+
+        //
+        // stoneSnappingZone
+        //
+        // The value by which the board cell size (length of one side) is multiplied, to get a square
+        // (presumably smaller than the cell itself) that serves as the "hit zone" for a stone stack
+        // being carried.  If the center of a carried stack is contained in the square, the stack is
+        // snapped into position in the center of the cell.
+        //
+        // NOTE: If stoneHighlightingZone is greater than stoneSnappingZone, a stone/stack within the the
+        // highlighting zone can be dropped onto the cell (at which point it will snap into position).
+        // That is, the larger of these two values determines the zone within which a stack/stone can
+        // be dropped into position on the board.
+        //
+        "stoneSnappingZone" : 0.250
+    },
+
+    "stickyWindow" :
+    {
+        //
+        // eventHorizon
+        //
+        // This value specifies how close to a WinTak window (either the main application window or another floating
+        // non-modal window, such as the TakHub or Chat window) another WinTak window must be moved or resized before
+        // it snaps to the edge of that window.
+        //
+        "eventHorizon" : 15,
+
+        //
+        // stickToScreen
+        //
+        // This value indicates whether a WinTak window should snap to the edge of the screen when the window is
+        // moved or resized to be within the event horizon's distance of that screen edge.
+        //
+        "stickToScreen" : true,
+
+        //
+        // stickToWindow
+        //
+        // This value indicates whether a WinTak window should snap to the edge of another WinTak window when it is
+        // moved or resized to be within the event horizon's distance of that other window.
+        //
+        "stickToWindow" : true,
+
+        //
+        // stickOnResize
+        //
+        // This value indicates whether or not windows are affected by stickiness when they are being resized.
+        //
+        "stickOnResize" : true,
+
+        //
+        // stickOnMove
+        //
+        // This value indicates whether or not windows are affected by stickiness when they are being moved.
+        //
+        "stickOnMove" : true
+    },
+
+    "appearance" :
+    {
+        "animation" :
+        {
+            //
+            // legalMoveHighlighting
+            //
+            // Specifies the manner(s) in which a stone pulsates when the mouse cursor moves over it.  A stone
+            // is highlighted if it is under the cursor and can be legally picked up to initiate a move, as well
+            // as if is lies above such a stone in a stack (and would thus be moved as part of the stack move).
+            // Currently either or both of the stone's opacity and scale (size) can be pulsed, but note
+            // that if multiple pulse types are specified the corresponding pulses are not guaranteed to
+            // be synchronized with one another, even if they specify the same pulse count and duration.
+            //
+            // Legal values for opacity range between 0.0 and 1.0.  The minimum legal value for scale is 0.0.  There's
+            // no specific maximum, but a value greater than a board cell width divided by the width of a flat stone
+            // will result in the stone expanding beyond the cell and possibly intersecting other stones.  The ratio
+            // of the stone width to the board cell width is specified by the stoneToCellWidthRatio configuration
+            // setting found below.  This means that the maximum scale you can specify and still avoid overlapping
+            // stones is (1.0 / stoneToCellWidthRatio), which based on the current value of that setting (0.85) would
+            // be 1.17647058823529.
+            //
+            // If the initial (default) value is greater than the minimum value and less than the maximum value,
+            // the first pulse will rise to the maximum first if the specified pulse count is positive, and will
+            // instead drop to the minimum first if the pulse count is negative.  The absolute valute of the count
+            // determines the number of pulses as follows:
+            //
+            // 1, -1 => Move to the maximum (1) or minimum (-1) value, and remain there.
+            // 2, -2 => Pulse once, then return to the default state and remain there.
+            // 3, -3 => Pulse twice, then return to the default state and remain there.
+            // 5, -5 => Pulse three times, then return to the default state and remain there.
+            // 7, -7 => Pulse four times, then return to the default state and remain there.
+            // ... and so on
+            //
+            // So, 1 (and -1) and 2 (and -2) are exceptions to the general rule that to get N "round trip" pulses,
+            // you need to specify (N * 2) - 1 as the pulseCount (or negative that value, to pulse downward first).
+            //
+            // The stopping rate value determines how quickly the stone is unhighlighted, that is, how fast it returns
+            // to its unhighlighted state from whatever state it was in at the time unhighlighting is initiated.  This
+            // specifies the fraction of the pulse time to use when unhighlighting; lower values unhighlight faster.
+            //
+            // Follwing are a few examples.  Here we use opacity, but scale would work as well:
+            //
+            // Here the pulse count is one, so when the mouse moves over a stone the stone will be highlighted and
+            // maintain its highlight (not pulse) until it's unhighlighted due to the mouse moving off of it, etc.
+            // Note that we specify zero milliseconds for the pulseDuration so that highlighting and unhighlighting
+            // happen immediately.
+            //
+            //   {
+            //       "pulseType"     : "opacity",
+            //       "pulseCount"    : -1,
+            //       "pulseDuration" : 0,
+            //       "minimumValue"  : 0.6,
+            //       "maximumValue"  : 1.0,
+            //       "defaultValue"  : 1.0,
+            //       "StoppingRate"  : 1.0
+            //   }
+            //
+            // Setting the pulse count to two will cause the stone to pulse once, then stop.
+            //
+            //   {
+            //       "pulseType"     : "opacity",
+            //       "pulseCount"    : -2,
+            //       "pulseDuration" : 333,
+            //       "minimumValue"  : 0.6,
+            //       "maximumValue"  : 1.0,
+            //       "defaultValue"  : 1.0,
+            //       "StoppingRate"  : 1.0
+            //   }
+            //
+            // To disable highlighting altogether, leave the "stonePulsing" array empty:
+            //
+            // "legalMoveHighlighting" : []
+            //
+            "legalMoveHighlighting" :
+            [
+                {
+                    "pulseType"     : "opacity",
+                    "pulseCount"    : -1,
+                    "pulseDuration" : 0,
+                    "minimumValue"  : 0.3,
+                    "maximumValue"  : 1.0,
+                    "defaultValue"  : 1.0,
+                    "StoppingRate"  : 1.0
+                }
+            ],
+
+            //
+            // gameWinHighlighting
+            //
+            // Specifies the manner in which stones involved in winning the game are highlighted when the game ends.
+            // These are either the stones that make up a road for a road win, or the stones counted toward a flat
+            // stone win.  (In the case of a road win, some stones connected to the road but not strictly necessary
+            // for the win might in some cases be highlighted along with the stones essential to the winning road.)
+            //
+            // ATTENTION: As with legalMoveHighlighting you can specify multiple highlighting effects.  However, at
+            //            the moment only opacity highlighting is suppported, and only a single effect is used.
+            //            Therefore, the only entry in the gameWinHighlighting array that will be used is the first
+            //            instance with the pulseType set to "opacity"; all other entries will be ignored.
+            //
+            "gameWinHighlighting" :
+            [
+                {
+                    "pulseType"     : "opacity",
+                    "pulseCount"    : -5,
+                    "pulseDuration" : 750,
+                    "minimumValue"  : 0.3,
+                    "maximumValue"  : 1.0,
+                    "defaultValue"  : 1.0,
+                    "StoppingRate"  : 0.5
+                }
+            ],
+
+            //
+            // highlightWhenInGrabZone
+            //
+            // If true, a stone pulses when the mouse cursor points to the stone and it can be legally picked
+            // up to initiate a move.  This includes drawing a stone from the reserve or grabbing a stack on
+            // the board.  In the case of a stack being grabbed from the board, all stones that would be moved
+            // as part of the move (i.e., those above the target stone) will be pulsed as well.  The manner in
+            // which the stone/stack is pulsed according to the stonePulsing setting.
+            //
+            "highlightWhenInGrabZone" : true,
+
+            //
+            // highlightWhenInDropZone
+            //
+            // If true, when a player is moving a stone/stack and it moves to a position where a stone can be
+            // dropped the stone/stack will pulsate.  The manner in which the stone/stack is pulsed according
+            // to the stonePulsing setting.
+            //
+            "highlightWhenInDropZone" : true,
+
+            //
+            // animateBoard
+            //
+            // If true, when the board is rotated and scaled to its default position at the beginning of
+            // each game, the rotation/scaling is animated, otherwise the board just snaps to the proper
+            // position.
+            //
+            "animateBoard" : true,
+
+            //
+            // rotateBoardToFacePlayer
+            //
+            // If true, when the user plays as Player 1 the board starts out with Player 2's reserve facing
+            // the player (and vice-versa), then rotates 180 degress after both players have completed their
+            // initial moves so that Player 1's reserve faces the player.  If false, each game starts with
+            // the player's own reserve facing the player and remains that way throughout the game.
+            //
+            "rotateBoardToFacePlayer" : true,
+
+            //
+            // animateMoves
+            //
+            // If true, animate AI moves and undo/redo moves.  If false, stones invoved in a move simply
+            // disappear and immediately appear in their final locations.
+            //
+            "animateMoves" : true,
+
+            //
+            // animationAirGap
+            //
+            // The gap between the bottom of a stack or stone being moved and the top of the highest object
+            // over which the stack/stone travels during a move.  This value is multiplied by the height of
+            // a flat stone to get the final air gap value.
+            //
+            "animationAirGap" : 1.0,
+
+            //
+            // boardZoomAnimationTime
+            //
+            // The number of milliseconds taken to perform the board zoom/rotate animation that occurs
+            // when the application starts up.
+            //
+            "boardZoomAnimationTime" : 750,
+
+            //
+            // boardResetAnimationTime
+            //
+            // The number of milliseconds it takes to perform animate the board moving/scaling into its
+            // default position when a new game is started, and when the Reset View command is executed.
+            //
+            "boardResetAnimationTime" : 750,
+
+            //
+            // moveAnimationTime
+            //
+            // The number of milliseconds it takes to animate a move the length of the board, assuming
+            // animationSpeedFactor (see below) is set to 1.0.  Consider this to be a very, very rough
+            // approximation.
+            //
+            "moveAnimationTime" : 1000,
+
+            //
+            // hintAnimationPauseTime
+            //
+            // When the user asks for a hint, a move is chosen by an AI and the move animated, after which
+            // the move is automatically undone.  This value specifies the number of milliseconds to pause
+            // after the move ends and the undo begins.
+            //
+            "hintAnimationPauseTime" : 500,
+
+            //
+            // animationSpeedFactor
+            //
+            // A value that's multiplied by the moveAnimationTime to compute the final move duration.
+            //
+            "animationSpeedFactor" : 0.5
+        },
+
+        "models" :
+        {
+            //
+            // boardModelFileName
+            // gridLineModelFileName
+            // flatStoneModelFileName
+            // capStoneModelFileName
+            //
+            // The pathnames (either absolute or relative to <wintak_dir>/Models) of the files containing
+            // the 3D model/mesh definitions for the board, the grid overlay, and two stone types.
+            //
+            "boardModelFileName"     : "BoardModel.json",
+            "gridLineModelFileName"  : "GridLineModel.json",
+            "flatStoneModelFileName" : "FlatStoneModel.json",
+            "capStoneModelFileName"  : "CapStoneModel.json",
+
+            //
+            // stoneToCellWidthRatio
+            //
+            // The ratio of the width of a flat stone to that of a board cell.
+            //
+            "stoneToCellWidthRatio" : 0.85
+        },
+
+        "lights" :
+        {
+            //
+            // directionalLights
+            //
+            // The directional lights to be added to the scene.  Other types of lights such as directional,
+            // ambient, or point lights are not yet supported.
+            //
+            "directionalLights" : [
+                {
+                    "direction" : [ 0.0, -1.0, 0.85 ],
+                    "color" : "AntiqueWhite"
+                },
+                {
+                    "direction" : [ -0.3, -1.0, 0.3 ],
+                    "color" : "AntiqueWhite"
+                }
+            ]
+        },
+
+        //
+        // These settings relate to the "Player 1 vs. Player 2" banner text displayed at the top of the main view,
+        // directly above the game board.
+        //
+        "banner" :
+        {
+            //
+            // fontNames
+            //
+            // This setting specifies one or more font family names.  The first font is used by default, but you
+            // can cycle through the fonts by holding the Control key down while rotating the mouse wheel.  Font
+            // names can include those of both the installed system fonts, as well as those fonts present in the
+            // WinTak\Resources\Fonts directory.
+            //
+            "fontNames" :
+            [
+                "Showcard Gothic",
+                "Dirty Headline",
+                "Ravie",
+                "Atama__G",
+                "Army of Darkness",
+                "Baldur Regular",
+                "FZ JAZZY 14 3D",
+                "Celtic Normal",
+                "Celtic Bold",
+                "Calibri",
+                "Times New Roman"
+            ],
+
+            //
+            // fontSizes
+            //
+            // This value is a three-element array containing the small, medium, and large font sizes to be used
+            // when rendering the banner.  The font size of the two player names grows from small to large, while
+            // the "vs." grows from small to medium.
+            //
+            "fontSizes" : [ 1, 15, 20 ],
+
+            //
+            // animationTime
+            //
+            // This setting specifies the number of milliseconds over which the font size used to display the two
+            // player names in the banner grows from its initial (small) size to its final (large) size.
+            //
+            "animationTime" : 750,
+
+            //
+            // gameOverQuips
+            //
+            // Quips to display in the banner at the end of an AI vs. AI game, or a remote game which you are
+            // kibitzing; in other words, games with no local human player.  This setting is handled differently
+            // than those below; this quip list should contain exacty two quips, the first to be used when the
+            // game has a winner, and the second to be used for games that end in a draw.
+            //
+            "gameOverQuips" :
+            [
+                "{winner} has won the game!",
+                "The game has ended in a draw."
+            ],
+
+            //
+            // gameWinQuips
+            //
+            // Quips to display in the banner at the end of the game, if the game was won by the player.  A quip is
+            // chosen randomly from the list, which must contain at least one string.
+            //
+            "gameWinQuips" :
+            [
+                "{winner} has won the game!",
+                "You win!  Excellent job.",
+                "You have bested your opponent!",
+                "That was awesome! You are Tak God!"
+            ],
+
+            //
+            // gameLossQuips
+            //
+            // Quips to display in the banner at the end of the game, if the game was lost by the player.  A quip is
+            // chosen randomly from the list, which must contain at least one string.
+            //
+            //
+            "gameLossQuips" :
+            [
+                "{winner} has won the game!",
+                "You've lost the game!",
+                "You're not very good, are you?",
+                "Nice try, loser." // "You suck!"
+            ],
+
+            //
+            // gameDrawQuips
+            //
+            // Quips to display in the banner at the end of a game that ends in a draw.  A quip is chosen randomly
+            // from the list, which must contain at least one string.
+            //
+            //
+            "gameDrawQuips" :
+            [
+                "The game has ended in a draw.",
+                "Well, you've eeked out a tie.",
+                "What, you can't beat this guy?"
+            ]
+        },
+
+        //
+        // audioPlayer
+        //
+        // The mechanism used to play sounds.  This should be set to either "MediaPlayer" or "SoundPlayer".
+        // For reasons I don't understand the MediaPlayer often either fails to play an audio clip entiredly,
+        // or delays for a large fraction of a second before playing, or plays only a portion of a clip.  For
+        // these reasons, using the SoundPlayer is recommended.
+        //
+        "audioPlayer" : "SoundPlayer",
+
+        //
+        // clipTableViewToBounds
+        //
+        // If true, clips the table view to its boundaries so that stones cannot be moved into the area
+        // covered by the main menu bar, otherwise stones dragged over the menu bar will be visible.  Setting
+        // this to false improves performance at the cost of stones being visible when dragged into the menu
+        // bar area.
+        //
+        "clipTableViewToBounds" : true,
+
+        //
+        // highlightMovingPlayerStones
+        //
+        // If true, stones involved in a (non-AI) player's move are highlighted while being moved, else not.
+        //
+        "highlightMovingPlayerStones" : false,
+
+        //
+        // highlightMovingAIStones
+        //
+        // If true, stones involved in an AI player's move are highlighted during move animation, else not.
+        //
+        "highlightMovingAIStones" : false,
+
+        //
+        // highlightWinningStones
+        //
+        // If true, stones involved in winning the game are highlighted when the game is won.  These are either
+        // the stones that make up a road for a road win, or the stones counted toward a flat stone win.  Note
+        // that in the case of a road win some stones connected to the road but not strictly needed for the win
+        // may be highlighted along with the stones making up the winning road.
+        //
+        "highlightWinningStones" : true,
+
+        //
+        // boardRotationDelta
+        //
+        // The number of degrees by which the table is rotated for each press of the left or right arrow key.
+        // Holding down either Ctrl key on the keyb0oard while rotating speeds up the animation by a factor
+        // of five.  NOTE: The Ctrl key must be pressed prior to the left or right arrow being pressed; if
+        // it is pressed after the arrow key is pressed the animation will be halted.
+        //
+        "boardRotationDelta" : 1.0,
+
+        //
+        // standingStoneAngles
+        //
+        // A list of integers indicating the number of degrees a standing stone should be spun about its Y-axis.
+        // Each standing stone is angled in accordance with one of the specified integers, chosen randomly.
+        // To get more varied stone angles specify a larger set of angles to choose from; for more uniformity
+        // specify few angles (as few as one).  If an integer in the list is negative, then a value between zero
+        // and 360, randomly chosen, is used for each stone.
+        //
+        "standingStoneAngles" : [ -1 ],
+
+        //
+        // boardZoomDistance
+        //
+        // The distance by which the view is zoomed in or out for each Ctrl-+ or Ctrl-- keypress.
+        //
+        "boardZoomDistance" : 100.0,
+
+        //
+        // allowInfiniteZoom
+        //
+        // If true, the view can be zoomed in such that the board model is clipped by the window, otherwise
+        // the view can only be zoomed in to the point where part of the board would not be visible.
+        //
+        "allowInfiniteZoom" : true,
+
+        //
+        // gameRulesTextUrl
+        //
+        // The URL of the game rules document.
+        //
+        "gameRulesTextUrl" : "https://cheapass.com/wp-content/uploads/2018/04/UniversityRulesSM.pdf",
+
+        //
+        // gameRulesVideoUrl
+        //
+        // The URL of a video explaining the game rules.
+        //
+        "gameRulesVideoUrl" : "https://youtu.be/iEXkpS-Q9dI"
+    },
+
+    "sounds" :
+    {
+        //
+        // winGame
+        // loseGame
+        //
+        // The sound played when you win or lose a game.
+        //
+        "winGame"        : [ "Clapping.wav", "OhYeah.wav", "Woohoo.wav" ],
+        "loseGame"       : [ "OhNo.wav" ],
+
+        //
+        // standingStone
+        // flatStone
+        // capStone
+        //
+        // The sound played when a stone of the corresponding type is placed or dropped.
+        //
+        "standingStone"  : "StandingStone.wav",
+        "flatStone"      : "FlatStone.wav",
+        "capStone"       : "Capstone.wav"
+    },
+
+    "aiBehavior" :
+    {
+        "Dinkum Thinkum" :
+        {
+            //
+            // treeEvaluaionDepth
+            //
+            // The depth of the AI search tree evaluated by the minimax algorithm with alpha-beta pruning.
+            // Increasing this value will increase AI thinking time significantly, especially on larger board
+            // sizes.  You have been warned!
+            //
+            "treeEvaluationDepth" : 3,
+
+            //
+            // maximumThinkingTime
+            //
+            // The maximum time, in milliseconds, the AI should consider possible moves before choosing one.
+            // A value of zero indicates that there is no time limit.
+            //
+            "maximumThinkingTime" : 0,
+
+            //
+            // cpuCoreUsagePercentage
+            //
+            // The fraction (as a percentage) of the machine's CPU cores that should be used during AI move
+            // evaluation.  For example, a value of 30 on an eight-core machine would use two cores.  By default
+            // (a value of zero) we allow the runtime framework to manage the amount of parallelism, optimizing
+            // performance while avoiding significant impacts to other processes running on the computer.
+            //
+            // This value is very "coarse."  Small changes to the value (other than to or from zero, which is
+            // a special case) are unlikely to change CPU usage, and even large changes are unlikely to closely
+            // match the percentage specified here.  Consider this value to be "sort of vaguely approximate."
+            //
+            "cpuCoreUsagePercentage" : 0,
+
+            //
+            // evaluateMovesInParallel
+            //
+            // If true, multiple moves are evaluated in parallel, improving performance on most machines.
+            //
+            "evaluateMovesInParallel" : true,
+
+            //
+            // evaluateCellsRandomly
+            //
+            // If true, the AI evaluates moves in random order of the moves' starting cells, otherwise moves
+            // are evaluation in a standard order in all cases.  There's currently no reason to set this to
+            // false.
+            //
+            "evaluateCellsRandomly" : true,
+
+            //
+            // randomizationSeed
+            //
+            // The integer to use as the seed for the randomizer.  If zero, the number of ticks of the system clock
+            // since the computer was started is used.  If you set this to a non-zero value, set evaluateCellsRandomly
+            // and evaluateMovesInParallel both to false, and cpuCoreUsagePercentage 1, then for a given board size
+            // the AI will always choose the same moves, assuming its opponent does the same.  This is primarily for
+            // debugging purposes (to get identical AI behavior over multiple runs).
+            //
+            "randomizationSeed" : 0
+        },
+
+        "The Experiment" :
+        {
+            //
+            // treeEvaluaionDepth
+            //
+            // The depth of the AI search tree evaluated by the minimax algorithm with alpha-beta pruning.
+            // Increasing this value will increase AI thinking time significantly, especially on larger board
+            // sizes.  You have been warned!
+            //
+            "treeEvaluationDepth" : 3,
+
+            //
+            // maximumThinkingTime
+            //
+            // The maximum time, in milliseconds, the AI should spend considering possible moves before deciding
+            // on one.  The AI isn't guaranteed to stop thinking immediately after this time has passed, but it
+            // will generally choose its move within a very short period of time.  A value of zero indicates that
+            // there is no time limit, and the search will be limited based on the depth of the tree being searched.
+            //
+            "maximumThinkingTime" : 0,
+
+            //
+            // cpuCoreUsagePercentage
+            //
+            // The fraction (as a percentage) of the machine's CPU cores that should be used during AI move
+            // evaluation.  For example, a value of 30 on an eight-core machine would use two cores.  By default
+            // (a value of zero) we allow the runtime framework to manage the amount of parallelism, optimizing
+            // performance while avoiding significant impacts to other processes running on the computer.
+            //
+            // This value is very "coarse."  Small changes to the value (other than to or from zero, which is
+            // a special case) are unlikely to change CPU usage, and even large changes are unlikely to closely
+            // match the percentage specified here.  Consider this value to be "sort of vaguely approximate."
+            //
+            "cpuCoreUsagePercentage" : 0,
+
+            //
+            // evaluateMovesInParallel
+            //
+            // If true, multiple moves are evaluated in parallel, improving performance on most machines.
+            //
+            "evaluateMovesInParallel" : true,
+
+            //
+            // evaluateCellsRandomly
+            //
+            // If true, the AI evaluates moves in random order of the moves' starting cells, otherwise moves
+            // are evaluation in a standard order in all cases.  There's currently no reason to set this to
+            // false.
+            //
+            "evaluateCellsRandomly" : true,
+
+            //
+            // randomizationSeed
+            //
+            // The integer to use as the seed for the randomizer.  If zero, the number of ticks of the system clock
+            // since the computer was started is used.  If you set this to a non-zero value, set evaluateCellsRandomly
+            // and evaluateMovesInParallel both to false, and cpuCoreUsagePercentage 1, then for a given board size
+            // the AI will always choose the same moves, assuming its opponent does the same.  This is primarily for
+            // debugging purposes (to get identical AI behavior over multiple runs).
+            //
+            "randomizationSeed" : 0
+        }
+    }
+}
+

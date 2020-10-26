@@ -1,0 +1,145 @@
+﻿<Window x:Class="STak.WinTak.HubConnectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:STak.WinTak"
+        mc:Ignorable="d"
+        Closing="WindowClosing"
+        Title="Connect to TakHub" Width="500" SizeToContent="Height" >
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="b2v" />
+    </Window.Resources>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="TakHub Server Address" Margin="0" BorderThickness="1" BorderBrush="Black">
+            <StackPanel>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="TakHub server (hostname or IP)" Margin="0,5,0,0" VerticalContentAlignment="Bottom" />
+                    <TextBox x:Name="m_hostname" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" VerticalContentAlignment="Center"
+                                                                                             HorizontalContentAlignment="Stretch">
+                        localhost
+                    </TextBox>
+                    <Label Grid.Row="0" Grid.Column="2" Content="Port:" Margin="10,5,0,0" VerticalContentAlignment="Bottom" />
+                    <TextBox x:Name="m_port" Grid.Row="0" Grid.Column="3" Margin="0,5,5,0" VerticalContentAlignment="Center"
+                                                                                         HorizontalContentAlignment="Stretch" MaxLength="5">
+                        2735
+                    </TextBox>
+                </Grid>
+
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <CheckBox x:Name="m_encrypt" Grid.Row="1" Content="Encrypt network traffic (https)." Margin="5,5,0,5"
+                                                                                        VerticalContentAlignment="Bottom" />
+                </Grid>
+
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Login Credentials" Margin="0,10,0,0" BorderThickness="1" BorderBrush="Black">
+            <StackPanel>
+
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="User name:" Margin="0,5,0,0" VerticalContentAlignment="Bottom" />
+                    <TextBox x:Name="m_userName" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" VerticalContentAlignment="Center"
+                                                                                            HorizontalContentAlignment="Stretch">
+                    </TextBox>
+                    <Label Grid.Row="0" Grid.Column="2" Content="Password:" Margin="10,5,0,0" VerticalContentAlignment="Bottom" />
+                    <PasswordBox x:Name="m_password" Grid.Row="0" Grid.Column="3" Margin="0,5,5,0" VerticalContentAlignment="Center"
+                                                                                                HorizontalContentAlignment="Stretch">
+                    </PasswordBox>
+                </Grid>
+
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <CheckBox x:Name="m_register" Grid.Row="0" Content="Register as new user" Margin="5,10,0,5" VerticalContentAlignment="Bottom" />
+                </Grid>
+
+                <StackPanel Visibility="{Binding IsChecked, ElementName=m_register, Converter={StaticResource b2v}}"
+                                                        IsEnabled="{Binding ElementName=m_register, Path=IsChecked}">
+                    <Grid Grid.Row="3" Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Confirm password:" Margin="0,5,0,0" VerticalContentAlignment="Bottom" />
+                        <PasswordBox x:Name="m_repeatPw" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" VerticalContentAlignment="Center"
+                                                                                                    HorizontalContentAlignment="Stretch" />
+                        <Label Grid.Row="1" Grid.Column="0" Content="Email address:" Margin="0,5,0,0" VerticalContentAlignment="Bottom" />
+                        <TextBox x:Name="m_email" Grid.Row="1" Grid.Column="1" Margin="0,5,0,5" VerticalContentAlignment="Center"
+                                                                                              HorizontalContentAlignment="Stretch" />
+                    </Grid>
+                </StackPanel>
+
+            </StackPanel>
+        </GroupBox>
+
+        <Grid Grid.Row="2" Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="1" Margin="5,10,5,5" Width="75" IsDefault="True"
+                                                      Click="OkButtonClickHandler">OK</Button>
+            <Button Grid.Row="0" Grid.Column="2" Margin="5,10,5,5" Width="75" IsCancel="False"
+                                              Click="CancelButtonClickHandler">Cancel</Button>
+        </Grid>
+
+    </Grid>
+</Window>

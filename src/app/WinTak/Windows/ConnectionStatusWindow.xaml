@@ -1,0 +1,26 @@
+﻿<Window x:Class="STak.WinTak.ConnectionStatusWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:STak.WinTak"
+        mc:Ignorable="d"
+        AllowsTransparency="True" WindowStyle="None" Background="Transparent"
+        MouseLeftButtonDown="OnMouseLeftButtonDown"
+        Title="ConnectionStatus" Height="125" Width="300">
+
+    <Grid Margin="5" Background="Wheat">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Margin="25" x:Name="m_statusText" TextWrapping="Wrap" />
+        <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="5" Click="OnCancelButtonClick">Cancel</Button>
+    </Grid>
+</Window>

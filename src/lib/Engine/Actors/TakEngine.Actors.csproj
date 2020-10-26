@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>STak.TakEngine.Actors</AssemblyName>
+    <RootNamespace>STak.TakEngine.Actors</RootNamespace>
+    <Version>1.0.0-alpha.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>STak.TakEngine.Actors</PackageId>
+    <Title>STak.TakEngine.Actors</Title>
+    <Company>Sandcastlewich Software</Company>
+    <Authors>Scott Southard</Authors>
+    <Copyright>Copyright â¬â 2020 Scott Southard</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/crasshacker/STak-TakEngine.Actors</RepositoryUrl>
+    <!-- <RepositoryBranch>TODO</RepositoryBranch> -->
+    <!-- <RepositoryCommit>TODO</RepositoryCommit> -->
+    <Description>
+      !!! This project is likely out of date, and is not recommended for use (yet) !!!
+      An Akka.NET actor-based implementation of TakEngine.IGame, allowing for separation between a game server and
+      the games that it hosts (which might be hosted in another process or on a different computer altogether).
+    </Description>
+    <PackageTags>Tak Board Game</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Akka" Version="1.4.10" />
+    <PackageReference Include="Akka.Remote" Version="1.4.10" />
+    <PackageReference Include="Akka.Logger.NLog" Version="1.4.5" />
+    <PackageReference Include="NLog" Version="4.7.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\TakEngine.csproj" />
+    <ProjectReference Include="..\Management\TakEngine.Management.csproj" />
+    <ProjectReference Include="..\..\Interop\Shared\Interop.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

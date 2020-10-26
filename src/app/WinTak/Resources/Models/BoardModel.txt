@@ -1,0 +1,92 @@
+{
+    "constants" :
+    {
+        "bevelExtent"     : 1040.0, // Required: The full width/extent of the board; used by BoardModel.cs.
+        "boardExtent"     : 1000.0,
+        "boardBottom"     :    0.0,
+        "boardLeftEdge"   : -499.0,
+        "boardRightEdge"  :  499.0,
+        "boardFrontEdge"  :  499.0,
+        "boardRearEdge"   : -499.0,
+        "boardHalfLength" :  500.0,
+        "boardHeight"     :  100.0,
+        "bevelLeftEdge"   : -520.0,
+        "bevelRightEdge"  :  520.0,
+        "bevelFrontEdge"  :  520.0,
+        "bevelRearEdge"   : -520.0,
+        "bevelHeight"     :   80.0
+    },
+
+    "vertices" :
+    [
+        [ "boardLeftEdge",  "boardHeight", "boardRearEdge"  ], // left top rear        //  0
+        [ "boardRightEdge", "boardHeight", "boardRearEdge"  ], // right top rear       //  1
+        [ "boardRightEdge", "boardHeight", "boardFrontEdge" ], // right top front      //  2
+        [ "boardLeftEdge",  "boardHeight", "boardFrontEdge" ], // left top front       //  3
+
+        [ "bevelLeftEdge",  "bevelHeight", "bevelRearEdge"  ], // left bevel rear      //  4
+        [ "bevelRightEdge", "bevelHeight", "bevelRearEdge"  ], // right bevel rear     //  5
+        [ "bevelRightEdge", "bevelHeight", "bevelFrontEdge" ], // right bevel front    //  6
+        [ "bevelLeftEdge",  "bevelHeight", "bevelFrontEdge" ], // left bevel front     //  7
+
+        [ "bevelLeftEdge",  "boardBottom", "bevelRearEdge"  ], // rear  bottom left    //  8
+        [ "bevelRightEdge", "boardBottom", "bevelRearEdge"  ], // rear  bottom right   //  9
+        [ "bevelRightEdge", "boardBottom", "bevelFrontEdge" ], // front bottom right   // 10
+        [ "bevelLeftEdge",  "boardBottom", "bevelFrontEdge" ], // front bottom left    // 11
+
+        // These are duplicates of the previous four points, to allow for different u,v
+        // values for texture mapping of the different triangles that share these points.
+        [ "bevelLeftEdge",  "boardBottom", "bevelRearEdge"  ], // rear  bottom left    // 12
+        [ "bevelRightEdge", "boardBottom", "bevelRearEdge"  ], // rear  bottom right   // 13
+        [ "bevelRightEdge", "boardBottom", "bevelFrontEdge" ], // front bottom right   // 14
+        [ "bevelLeftEdge",  "boardBottom", "bevelFrontEdge" ]  // front bottom left    // 15
+    ],
+
+    "triangles" :
+    [
+        [  3,  1,  0 ],         // top
+        [  3,  2,  1 ],
+        [  5,  0,  1 ],         // rear bevel
+        [  5,  4,  0 ],
+        [  6,  1,  2 ],         // right bevel
+        [  6,  5,  1 ],
+        [  7,  2,  3 ],         // front bevel
+        [  7,  6,  2 ],
+        [  4,  3,  0 ],         // left bevel
+        [  4,  7,  3 ],
+        [  9,  4,  5 ],         // rear side
+        [  9,  8,  4 ],
+        [ 14,  5,  6 ],         // right side
+        [ 14, 13,  5 ],
+        [ 11,  6,  7 ],         // front side
+        [ 11, 10,  6 ],
+        [ 12,  7,  4 ],         // left side
+        [ 12, 15,  7 ],
+        [ 10,  8,  9 ],         // bottom
+        [ 10, 11,  8 ]
+
+    ],
+
+    "textureMap" :
+    [
+        [ 0.2, 0.2 ],
+        [ 0.8, 0.2 ],
+        [ 0.8, 0.8 ],
+        [ 0.2, 0.8 ],
+
+        [ 0.2, 0.1 ],
+        [ 0.8, 0.1 ],
+        [ 0.8, 0.9 ],
+        [ 0.2, 0.9 ],
+
+        [ 0.2, 0.2 ],
+        [ 0.8, 0.2 ],
+        [ 0.8, 0.8 ],
+        [ 0.2, 0.8 ],
+
+        [ 0.0, 0.2 ],
+        [ 1.0, 0.2 ],
+        [ 1.0, 0.8 ],
+        [ 0.0, 0.8 ]
+    ]
+}

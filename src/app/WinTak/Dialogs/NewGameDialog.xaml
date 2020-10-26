@@ -1,0 +1,74 @@
+<Window x:Class="STak.WinTak.NewGameDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="New Game" SizeToContent="Height" Width="400">
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5">Player 1:</TextBlock>
+        <ComboBox  Grid.Row="0" Grid.Column="1" IsTabStop="True" TabIndex="1" Margin="5" SelectedIndex="0"
+                                                SelectionChanged="ChangePlayer1Type" x:Name="m_player1Type">
+            <ComboBoxItem>Human</ComboBoxItem>
+            <ComboBoxItem>AI</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Grid.Row="0" Grid.Column="2" Margin="5">Name:</TextBlock>
+        <TextBox Grid.Row="0" Grid.Column="3" Grid.ZIndex="2" x:Name="m_player1Name" IsTabStop="True" TabIndex="2"
+                                                                                             Margin="5"></TextBox>
+        <ComboBox Grid.Row="0" Grid.Column="3" Grid.ZIndex="1" x:Name="m_player1AIName" IsTabStop="False" TabIndex="3"
+                                                      ItemsSource="{Binding Path=Player1TakAI}" Margin="5"></ComboBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5">Player 2:</TextBlock>
+        <ComboBox  Grid.Row="1" Grid.Column="1" IsTabStop="True"  TabIndex="4" Margin="5" SelectedIndex="0"
+                                                SelectionChanged="ChangePlayer2Type" x:Name="m_player2Type">
+            <ComboBoxItem>Human</ComboBoxItem>
+            <ComboBoxItem>AI</ComboBoxItem>
+        </ComboBox>
+        <TextBlock Grid.Row="1" Grid.Column="2" Margin="5">Name:</TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="3" Grid.ZIndex="2" x:Name="m_player2Name" IsTabStop="True" TabIndex="5"
+                                                                                             Margin="5"></TextBox>
+        <ComboBox Grid.Row="1" Grid.Column="3" Grid.ZIndex="1" x:Name="m_player2AIName" IsTabStop="False" TabIndex="6"
+                                                    ItemsSource="{Binding Path=Player2TakAI}" Margin="5"></ComboBox>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="5">Board Size:</TextBlock>
+        <ComboBox  Grid.Row="2" Grid.Column="1" IsTabStop="True"  TabIndex="7" Margin="5" SelectedIndex="2"
+                                                                                      x:Name="m_boardSize">
+            <ComboBoxItem>3</ComboBoxItem>
+            <ComboBoxItem>4</ComboBoxItem>
+            <ComboBoxItem>5</ComboBoxItem>
+            <ComboBoxItem>6</ComboBoxItem>
+            <ComboBoxItem>7</ComboBoxItem>
+            <ComboBoxItem>8</ComboBoxItem>
+        </ComboBox>
+
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="3" Grid.Column="1" Margin="5" Width="75" IsDefault="True" IsTabStop="True"
+                                                   TabIndex="8" Click="OkButtonClickHandler">OK</Button>
+            <Button Grid.Row="3" Grid.Column="2" Margin="5" Width="75" IsCancel="True" IsTabStop="True"
+                                                                         TabIndex="9" >Cancel</Button>
+        </Grid>
+    </Grid>
+</Window>
