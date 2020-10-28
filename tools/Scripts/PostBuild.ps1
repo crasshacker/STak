@@ -34,47 +34,6 @@ $app_dir        = "$src_dir\app"
 $doc_src_dir    = "$tak_dir\Docs"
 $plugin_dir     = "$src_dir\lib\Engine\ExperimentalTakAI"
 
-function ProcessModels
-{
-    if ($Project -contains "WinTak")
-    {
-        if (! (Test-Path $models_bin_dir)) { mkdir $models_bin_dir -Force -ErrorAction Continue | Out-Null }
-
-        & "$script_dir\RemoveJsonComments.ps1" -InputPath "$wintak_src_dir\Resources\Models\FlatStoneModel.txt",
-                                                          "$wintak_src_dir\Resources\Models\CapStoneModel.txt",
-                                                          "$wintak_src_dir\Resources\Models\GridLineModel.txt",
-                                                          "$wintak_src_dir\Resources\Models\BoardModel.txt" `
-                                               -OutputPath $models_bin_dir -Force
-    }
-}
-
-function ProcessAppSettings
-{
-    if ($Project -contains "WinTak")
-    {
-        copy -Force -Verbose "$wintak_src_dir\uiappsettings.json"      "$wintak_bin_dir"
-        copy -Force -Verbose "$wintak_src_dir\interopappsettings.json" "$wintak_bin_dir"
-    }
-}
-
-function ProcessFonts
-{
-    if ($Project -contains "WinTak")
-    {
-        mkdir -Force -Verbose $font_bin_dir -ErrorAction Continue | Out-Null
-
-        copy -Verbose -Force "$font_src_dir\Army of Darkness.ttf" $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\Atama__G.ttf"         $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\Baldur Regular.ttf"   $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\Celtic Bold.ttf"      $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\Celtic Normal.ttf"    $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\Dirty Headline.ttf"   $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\FZ JAZZY 14 3D.ttf"   $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\RAVIE.TTF"            $font_bin_dir
-        copy -Verbose -Force "$font_src_dir\Showcard Gothic.ttf"  $font_bin_dir
-    }
-}
-
 function ProcessMarkdownDocs
 {
     $applystyles = "$script_dir\ApplyGitHubStyles.ps1" 
@@ -168,10 +127,7 @@ foreach ($release_type in $Config)
 {
     $wintak_src_dir = "$app_dir\WinTak"
     $wintak_bin_dir = "$wintak_src_dir\bin\$release_type\$wintak_target_framework"
-    $models_bin_dir = "$wintak_bin_dir\Resources\Models"
-    $font_bin_dir   = "$wintak_bin_dir\Resources\Fonts"
     $wintak_doc_dir = "$wintak_bin_dir\Resources\Documents"
-    $font_src_dir   = "$wintak_src_dir\Resources\Fonts"
 
     $takhub_src_dir = "$app_dir\TakHub\Server"
     $takhub_bin_dir = "$takhub_src_dir\bin\$release_type\$takhub_target_framework"
@@ -180,9 +136,6 @@ foreach ($release_type in $Config)
     $wintak_plugin_bin_dir = "$wintak_bin_dir\Plugins"
     $takhub_plugin_bin_dir = "$takhub_bin_dir\Plugins"
 
-    ProcessFonts
-    ProcessModels
-    ProcessAppSettings
     ProcessMarkdownDocs
     ProcessPlugins
 }

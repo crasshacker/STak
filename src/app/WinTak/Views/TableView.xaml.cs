@@ -102,8 +102,17 @@ namespace STak.WinTak
             this.MouseEnter       += MouseEnterHandler;
             this.MouseLeave       += MouseLeaveHandler;
             this.MouseWheel       += MouseWheelHandler;
-        }
 
+            // Don't configure the animation speed slider's ValueChanged event until everything has been properly
+            // loaded.  Doing this to early will cause WPF to crash at startup after getting caught in an infinite
+            // recursive call loop at startup, if the application is packaged as a single-file application.  Note
+            // also that we need to trigger the speed changed event manually to get things initialized properly.
+            this.Loaded += (_, _) =>
+            {
+                m_animationSpeed.ValueChanged += OnAnimationSpeedChanged;
+                OnAnimationSpeedChanged(this, new RoutedPropertyChangedEventArgs<double>(0, m_animationSpeed.Value));
+            };
+        }
 
         public void Observe(IEventBasedGameActivityTracker tracker)
         {

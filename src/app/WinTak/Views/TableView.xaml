@@ -94,7 +94,7 @@
 
                     <Slider Grid.Column="2" x:Name="m_animationSpeed" Margin="25" MinWidth="200" Width="200" Maximum="100"
                                       TickPlacement="BottomRight" TickFrequency="10" Value="50" IsDirectionReversed="true"
-                                                        IsMoveToPointEnabled="true" ValueChanged="OnAnimationSpeedChanged">
+                                                                                               IsMoveToPointEnabled="true">
                     </Slider>
                 </Grid>
 

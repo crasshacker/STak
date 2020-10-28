@@ -20,7 +20,11 @@ namespace STak.WinTak
         public virtual IMeshModel Build()
         {
             var jsonText  = File.ReadAllText(m_fileName);
-            var options   = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var options   = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                ReadCommentHandling         = JsonCommentHandling.Skip
+            };
             var jsonModel = JsonSerializer.Deserialize<JsonMeshModel>(jsonText, options);
 
             return new MeshModel(ConvertJsonModelToRawModel(jsonModel));

@@ -1638,14 +1638,19 @@ namespace STak.WinTak
                 object obj = e.ExceptionObject;
                 string message = obj.ToString();
 
-                if (obj is Exception)
+                if (obj is Exception exception)
                 {
-                    Exception exception = obj as Exception;
+                    while (exception.InnerException is not null)
+                    {
+                        exception = exception.InnerException ;
+                    }
                     message = $"Caught exception: {exception.Message}\n\n{exception.StackTrace}";
                 }
 
                 MessageBox.Show(message);
-                File.WriteAllText(Path.Combine(App.GetApplicationDirectory(), "WinTakError.txt"), message + '\n');
+
+                try { File.WriteAllText(Path.Combine(App.GetApplicationDirectory(), "WinTakError.txt"), message); }
+                catch { }
             }
             catch
             {
