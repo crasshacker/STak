@@ -50,7 +50,7 @@
         [
             {
                 "logger"   : "*",
-                "minLevel" : "Warn",
+                "minLevel" : "Debug",
                 "writeTo"  : "logFile"
             }
         ]
