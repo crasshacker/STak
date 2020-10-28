@@ -179,6 +179,7 @@ namespace STak.TakEngine
 
         private static MetadataReference[] GetMetadataReferences()
         {
+#pragma warning disable IL3000
             List<MetadataReference> refs = new List<MetadataReference>();
 
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
@@ -194,6 +195,7 @@ namespace STak.TakEngine
             refs.Add(MetadataReference.CreateFromFile(typeof(PluginLoader<>).GetTypeInfo().Assembly.Location));
 
             return refs.ToArray();
+#pragma warning restore IL3000
         }
 
 

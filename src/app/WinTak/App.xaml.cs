@@ -44,7 +44,7 @@ namespace STak.WinTak
 
         public static string GetApplicationDirectory()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return Path.GetDirectoryName(AppContext.BaseDirectory);
         }
 
 

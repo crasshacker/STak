@@ -23,7 +23,7 @@ namespace STak.TakEngine.AI
                     DefaultTakAI defaultTakAI = new DefaultTakAI();
                     s_takAIs[defaultTakAI.Name] = defaultTakAI;
 
-                    string processPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    string processPath = Path.GetDirectoryName(AppContext.BaseDirectory);
                     string pluginDir   = Path.Combine(processPath, "Plugins");
 
                     foreach (ITakAI takAI in PluginLoader<ITakAI>.LoadPlugins(pluginDir))
