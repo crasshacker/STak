@@ -280,9 +280,6 @@ namespace STak.WinTak
                 }
             }
 
-            // TODO - Build a Model3D that contains both the board and grid line models,
-            //        and use this in the TableView for hit testing.
-
             ApplyScheme(Scheme.Current);
         }
     }

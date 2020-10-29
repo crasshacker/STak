@@ -36,7 +36,7 @@ namespace STak.WinTak.Properties
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Board.jpg")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Default\Board.jpg")]
         public string BoardTextureFile {
             get {
                 return ((string)(this["BoardTextureFile"]));
@@ -48,7 +48,7 @@ namespace STak.WinTak.Properties
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Player1Stone.jpg")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Default\Player1Stone.jpg")]
         public string P1StoneTextureFile {
             get {
                 return ((string)(this["P1StoneTextureFile"]));
@@ -60,7 +60,7 @@ namespace STak.WinTak.Properties
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Player2Stone.jpg")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"Default\Player2Stone.jpg")]
         public string P2StoneTextureFile {
             get {
                 return ((string)(this["P2StoneTextureFile"]));
