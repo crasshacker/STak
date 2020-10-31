@@ -70,32 +70,43 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <local:JumpSlider Grid.Column="0" x:Name="m_undoRedoSlider" Margin="25" MinWidth="200" Width="200"
-                        Maximum="1" IsMoveToPointEnabled="true" IsSnapToTickEnabled="true" TickPlacement="BottomRight"
-                               TickFrequency="1" Value="0" AutoToolTipPlacement="TopLeft" AutoToolTipFormat="Move {0}"
-                               IsEnabled="true" SmallChange="1" LargeChange="1" ValueChanged="OnUndoRedoSliderChanged">
-                    </local:JumpSlider>
+                    <StackPanel Grid.Column="0">
+                        <local:JumpSlider x:Name="m_undoRedoSlider" Margin="25,25,25,5" Width="200" Value="0"
+                          Maximum="1" IsEnabled="true" IsMoveToPointEnabled="true" IsSnapToTickEnabled="true"
+                                 TickPlacement="BottomRight" TickFrequency="1" AutoToolTipPlacement="TopLeft"
+                                                 AutoToolTipFormat="Move {0}" SmallChange="1" LargeChange="1"
+                                                                       ValueChanged="OnUndoRedoSliderChanged">
+                        </local:JumpSlider>
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0">
+                            Game Position (Ply)
+                        </TextBlock>
+                    </StackPanel>
 
                     <FlowDocumentScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Hidden"
                                                                 VerticalScrollBarVisibility="Hidden">
                         <FlowDocument TextAlignment="Center">
-                            <Paragraph Foreground="White">
+                            <Paragraph Foreground="White" Focusable="false">
                                 <Run x:Name="m_playerOne" FontSize="1">PlayerOne</Run>
                                 <InlineUIContainer>
                                     <TextBlock Margin="5,0" x:Name="m_connector" FontSize="1">vs.</TextBlock>
                                 </InlineUIContainer>
                                 <Run x:Name="m_playerTwo" FontSize="1">PlayerTwo</Run>
                             </Paragraph>
-                            <Paragraph Foreground="White">
+                            <Paragraph Foreground="White" Focusable="false">
                                 <Run x:Name="m_bannerText" FontSize="1"></Run>
                             </Paragraph>
                         </FlowDocument>
                     </FlowDocumentScrollViewer>
 
-                    <Slider Grid.Column="2" x:Name="m_animationSpeed" Margin="25" MinWidth="200" Width="200" Maximum="100"
-                                      TickPlacement="BottomRight" TickFrequency="10" Value="50" IsDirectionReversed="true"
-                                                                                               IsMoveToPointEnabled="true">
-                    </Slider>
+                    <StackPanel Grid.Column="2" Orientation="Vertical">
+                        <Slider x:Name="m_animationSpeed" Margin="25,25,25,5" Width="200" Value="50" Maximum="100"
+                                         TickPlacement="BottomRight" TickFrequency="10" IsDirectionReversed="true"
+                                                                                       IsMoveToPointEnabled="true">
+                        </Slider>
+                        <TextBlock Foreground="White" HorizontalAlignment="Center" Margin="0">
+                            Animation Speed
+                        </TextBlock>
+                    </StackPanel>
                 </Grid>
 
             </Grid>
