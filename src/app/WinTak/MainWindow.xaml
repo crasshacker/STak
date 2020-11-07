@@ -104,7 +104,6 @@
         <KeyBinding Key="D" Modifiers="Control" Command="{x:Static takui:MainWindow.DebugLogCommand}"          />
         <KeyBinding Key="R" Modifiers="Control" Command="{x:Static takui:MainWindow.ResetViewCommand}"         />
         <KeyBinding Key="A" Modifiers="Control" Command="{x:Static takui:MainWindow.AppearanceCommand}"        />
-        <KeyBinding Key="O" Modifiers="Control" Command="{x:Static takui:MainWindow.AdvancedOptionsCommand}"   />
         <KeyBinding Key="E" Modifiers="Control" Command="{x:Static takui:MainWindow.EnableAudioCommand}"       />
         <KeyBinding Key="H" Modifiers="Control" Command="{x:Static takui:MainWindow.ShowMoveHintCommand}"      />
     </Window.InputBindings>

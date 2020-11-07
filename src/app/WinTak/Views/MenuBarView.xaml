@@ -56,7 +56,7 @@
                 <MenuItem x:Name="EnableAudio" Header="_Enable Audio" IsCheckable="true" IsChecked="false"
                           Command="{x:Static takui:MainWindow.EnableAudioCommand}" InputGestureText="Ctrl+E" />
                 <MenuItem x:Name="AdvancedOptions" Header="Advanced Options..." 
-                          Command="{x:Static takui:MainWindow.AdvancedOptionsCommand}" InputGestureText="Ctrl+O" />
+                          Command="{x:Static takui:MainWindow.AdvancedOptionsCommand}" />
             </MenuItem>
 
             <MenuItem Header="_Help">
