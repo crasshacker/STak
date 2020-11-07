@@ -996,11 +996,21 @@ namespace STak.WinTak
 
         private void SaveAsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            string directory = String.Empty;
+            string fileName  = c_defaultGameFileName;
+
+            if (m_saveFileName != null)
+            {
+                directory = Path.GetDirectoryName(m_saveFileName);
+                fileName  = Path.GetFileName(m_saveFileName);
+            }
+
             SaveFileDialog dialog = new SaveFileDialog
             {
-                FileName   = c_defaultGameFileName,
-                DefaultExt = c_defaultGameFileNameExtension,
-                Filter     = c_defaultGameFileNameFilter
+                InitialDirectory = directory,
+                FileName         = fileName,
+                DefaultExt       = c_defaultGameFileNameExtension,
+                Filter           = c_defaultGameFileNameFilter
             };
 
             bool? result = dialog.ShowDialog(this);
