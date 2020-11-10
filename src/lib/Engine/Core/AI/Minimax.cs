@@ -170,8 +170,6 @@ namespace STak.TakEngine.AI
             {
                 if (m_game.IsCompleted)
                 {
-                    // TODO? - Implement "class PassMove : IMove", which when executed does nothing, and return an
-                    //         instance here, so that calling code can execute it normally.  Or is this a bad idea?
                     return null;
                 }
 
@@ -225,6 +223,7 @@ namespace STak.TakEngine.AI
 
                         // Recursively analyze the move to determine the best outcome from this move.
                         int value = Analyze(game, false, depth-1, MinValue, MaxValue, cells, taskData, token);
+                     // int value = - NegaMax(game, false, depth-1, MinValue, MaxValue, cells, taskData, token);
 
                         // Undo the move.
                         game.UndoMove(Player.None);
@@ -278,7 +277,6 @@ namespace STak.TakEngine.AI
                     if (move is StackMove) { Interlocked.Increment(ref m_stackMoveCount); }
 
                     SaveBitBoard(game.BitBoard, taskData, depth);
-
                     game.MakeMove(Player.None, move);
 
                     int nextAlpha = maximize ? bestResult.Value : alpha;
@@ -288,7 +286,6 @@ namespace STak.TakEngine.AI
                     int value = Analyze(game, ! maximize, depth-1, nextAlpha, nextBeta, cells, taskData, token);
 
                     game.UndoMove(Player.None);
-
                     ValidateSavedBitBoard(game.BitBoard, taskData, depth);
 
                     EvaluationResult currentResult = new EvaluationResult(move, value);
@@ -301,6 +298,51 @@ namespace STak.TakEngine.AI
                     {
                         break;
                     }
+                }
+
+                return bestResult.Value;
+            }
+
+
+            private int NegaMax(IBasicGame game, bool maximize, int depth, int alpha, int beta, List<Cell> cells,
+                                                              AnalyzerTaskData taskData, CancellationToken token)
+            {
+                // Evaluate and return if cancelled, or at full search depth, or game has been completed.
+                if (token.IsCancellationRequested || depth == 0 || game.Result.WinType != WinType.None)
+                {
+                    return m_evaluator.Evaluate(game, m_maximizingPlayerId) * (maximize ? 1 : -1);
+                }
+
+                IBoard        board    = game.BitBoard;
+                int           turn     = game.ActiveTurn;
+                int           playerId = game.ActivePlayer.Id;
+                PlayerReserve reserve  = game.Reserves[game.ActiveReserve];
+
+                EvaluationResult bestResult = new EvaluationResult(null, alpha);
+
+                foreach (IMove move in MoveEnumerator.EnumerateMoves(board, turn, playerId, reserve, cells))
+                {
+                    if (move is StoneMove) { Interlocked.Increment(ref m_stoneMoveCount); }
+                    if (move is StackMove) { Interlocked.Increment(ref m_stackMoveCount); }
+
+                    SaveBitBoard(game.BitBoard, taskData, depth);
+                    game.MakeMove(Player.None, move);
+
+                    // Recurse, reversing maximize and decrementing depth.
+                    int value = - NegaMax(game, ! maximize, depth-1, -beta, -alpha, cells, taskData, token);
+
+                    game.UndoMove(Player.None);
+                    ValidateSavedBitBoard(game.BitBoard, taskData, depth);
+
+                    EvaluationResult currentResult = new EvaluationResult(move, value);
+                    UpdateEvaluationResult(bestResult, currentResult, true);
+
+                    if (bestResult.Value >= beta || token.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    alpha = Math.Max(alpha, bestResult.Value);
                 }
 
                 return bestResult.Value;

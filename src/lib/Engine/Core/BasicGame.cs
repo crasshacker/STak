@@ -104,6 +104,10 @@ namespace STak.TakEngine
 
             if (sync)
             {
+                // We must initialize and start the game prior to making moves.
+                Initialize();
+                Start();
+
                 foreach (var move in prototype.Moves)
                 {
                     MakeMove(ActivePlayer.Id, move);

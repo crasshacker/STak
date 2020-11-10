@@ -41,11 +41,19 @@ namespace STak.TakTool
             var ai = TakAI.GetAI(aiName);
             ai.Options = AIConfiguration<TakAIOptions>.Get(aiName);
 
-            // Negative values represent (positive) milliseconds; positive values represent seconds.
-            maxThinkingTime = (maxThinkingTime < 0) ? -maxThinkingTime : maxThinkingTime * 1000;
+            // Negative values signify (positive) milliseconds; positive values signify seconds; zero means infinite.
+            // Note: -1 is equivalent to Timeout.InfiniteTimeSpan, used in the .NET Core timer code.
 
-            if (searchDepth     > 0) { ai.Options.TreeEvaluationDepth = searchDepth;     }
-            if (maxThinkingTime > 0) { ai.Options.MaximumThinkingTime = maxThinkingTime; }
+            maxThinkingTime = (maxThinkingTime > 0) ?  maxThinkingTime * 1000
+                            : (maxThinkingTime < 0) ? -maxThinkingTime
+                                                    : -1;
+
+            ai.Options.MaximumThinkingTime = maxThinkingTime;
+
+            if (searchDepth > 0)
+            {
+                ai.Options.TreeEvaluationDepth = searchDepth;
+            }
 
             string ptn = File.Exists(boardState) ? File.ReadAllText(boardState) : boardState;
             var record = PtnParser.ParseText(ptn);
@@ -384,7 +392,7 @@ namespace STak.TakTool
             [Option(Default=3)]
             public int SearchDepth { get; set; }
 
-            [Option(Default=-1)]
+            [Option(Default=0)]
             public int MaxThinkingTime { get; set; }
 
             [Option(Required=true)]
