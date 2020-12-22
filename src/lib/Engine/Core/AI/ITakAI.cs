@@ -9,6 +9,9 @@ namespace STak.TakEngine.AI
         string       Name    { get; }
         TakAIOptions Options { get; set; }
 
+        void OnGameInitiated();
+        void OnGameCompleted();
+
         IMove ChooseNextMove(IBasicGame game, CancellationToken token);
     }
 }

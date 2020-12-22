@@ -13,6 +13,9 @@ namespace STak.TakEngine.AI
     {
         private static Dictionary<string, ITakAI> s_takAIs = new Dictionary<string, ITakAI>();
 
+        public const int LossValue = Int32.MinValue+1;
+        public const int WinValue  = Int32.MaxValue-1;
+
 
         public static void LoadPlugins()
         {

@@ -6,12 +6,17 @@ using STak.TakEngine;
 
 namespace STak.TakEngine.AI
 {
-    public static class MoveEnumerator
+    public class MoveEnumerator : IMoveEnumerator
     {
-        public static List<IMove> EnumerateMoves(IBoard board, int turn, int playerId, PlayerReserve reserve,
-                                                                                      IList<Cell> boardCells)
+        public List<IMove> EnumerateMoves(IBoard board, int turn, int playerId, int reserveId, PlayerReserve reserve,
+                                                                      IList<Cell> boardCells, IMove firstMove = null)
         {
             List<IMove> moves = new List<IMove>();
+
+            if (firstMove != null)
+            {
+                moves.Add(firstMove);
+            }
 
             if (turn == 1)
             {
@@ -19,7 +24,7 @@ namespace STak.TakEngine.AI
                 {
                     if (board[cell].IsEmpty)
                     {
-                        moves.Add(new StoneMove(cell, new Stone(playerId, StoneType.Flat)));
+                        moves.Add(new StoneMove(cell, new Stone(reserveId, StoneType.Flat)));
                     }
                 }
             }
@@ -31,12 +36,12 @@ namespace STak.TakEngine.AI
                     {
                         if (reserve.GetAvailableStoneCount(StoneType.Flat) > 0)
                         {
-                            moves.Add(new StoneMove(cell, new Stone(playerId, StoneType.Flat)));
-                            moves.Add(new StoneMove(cell, new Stone(playerId, StoneType.Standing)));
+                            moves.Add(new StoneMove(cell, new Stone(reserveId, StoneType.Flat)));
+                            moves.Add(new StoneMove(cell, new Stone(reserveId, StoneType.Standing)));
                         }
                         if (reserve.GetAvailableStoneCount(StoneType.Cap) > 0)
                         {
-                            moves.Add(new StoneMove(cell, new Stone(playerId, StoneType.Cap)));
+                            moves.Add(new StoneMove(cell, new Stone(reserveId, StoneType.Cap)));
                         }
                     }
                 }
@@ -65,8 +70,8 @@ namespace STak.TakEngine.AI
         }
 
 
-        private static bool EnumerateStackMoves(IBoard board, Cell startingCell, Cell currentCell, Direction direction,
-                                                           int stoneCount, List<int> dropCounts, ref List<IMove> moves)
+        private bool EnumerateStackMoves(IBoard board, Cell startingCell, Cell currentCell, Direction direction,
+                                                    int stoneCount, List<int> dropCounts, ref List<IMove> moves)
         {
             currentCell = currentCell.Move(direction);
 

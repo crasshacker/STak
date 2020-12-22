@@ -95,7 +95,7 @@ namespace STak.TakEngine
 
         public override string ToString()
         {
-            return ToString(true);
+            return ToString(false);
         }
 
 

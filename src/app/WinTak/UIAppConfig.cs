@@ -152,6 +152,7 @@ namespace STak.WinTak
         {
             public string[] WinGame       { get; set; }
             public string[] LoseGame      { get; set; }
+            public string[] DrawGame      { get; set; }
             public string   StandingStone { get; set; }
             public string   FlatStone     { get; set; }
             public string   CapStone      { get; set; }

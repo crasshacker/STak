@@ -11,5 +11,7 @@ namespace STak.TakEngine.AI
         public int  RandomizationSeed       { get; set; } = 0;
         public bool EvaluateCellsRandomly   { get; set; } = true;
         public bool EvaluateMovesInParallel { get; set; } = true;
+        public bool SearchNullWindow        { get; set; } = true;
+        public bool UseTranspositionTable   { get; set; } = true;
     }
 }

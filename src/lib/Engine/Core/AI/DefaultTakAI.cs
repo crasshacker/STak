@@ -10,6 +10,8 @@ namespace STak.TakEngine.AI
         private static TakAIOptions s_defaultOptions { get; set; } = new TakAIOptions();
         private        TakAIOptions s_options;
 
+        private Minimaxer m_minimaxer;
+
         public string       Name    => "Dinkum Thinkum"; 
         public TakAIOptions Options { get => s_options ?? s_defaultOptions;
                                       set => s_options = value; }
@@ -17,18 +19,24 @@ namespace STak.TakEngine.AI
 
         public DefaultTakAI()
         {
+            m_minimaxer = new BasicMinimaxer(new MoveEnumerator(), new BoardEvaluator());
         }
 
 
         public IMove ChooseNextMove(IBasicGame game, CancellationToken token)
         {
-            Minimax minimax = new Minimax(game, new BoardEvaluator());
-            return minimax.Analyze(Options.TreeEvaluationDepth,
-                                   Options.EvaluateCellsRandomly,
-                                   Options.RandomizationSeed,
-                                   Options.EvaluateMovesInParallel,
-                                   Options.CpuCoreUsagePercentage,
-                                   token);
+            return m_minimaxer.ChooseMove(game, Options, token);
+        }
+
+
+        public void OnGameInitiated()
+        {
+        }
+
+
+        public void OnGameCompleted()
+        {
+            m_minimaxer.LogResults();
         }
 
 
@@ -47,11 +55,11 @@ namespace STak.TakEngine.AI
                 {
                     if (game.Result.Winner == playerId)
                     {
-                        score = Minimax.MaxValue-1;
+                        score = TakAI.WinValue;
                     }
                     else if (game.Result.Winner == 1-playerId)
                     {
-                        score = Minimax.MinValue+1;
+                        score = TakAI.LossValue;
                     }
                 }
                 else

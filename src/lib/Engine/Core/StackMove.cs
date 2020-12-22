@@ -366,7 +366,7 @@ namespace STak.TakEngine
 
         public override string ToString()
         {
-            return ToString(true);
+            return ToString(false);
         }
 
 
@@ -424,10 +424,9 @@ namespace STak.TakEngine
                 && Direction   .Equals(move.Direction)
                 && StoneCount  .Equals(move.StoneCount)
                 && DropCounts  .SequenceEqual(move.DropCounts)
-                && ((FlattenedStone == null && move.FlattenedStone == null)
-                              || FlattenedStone.Equals(move.FlattenedStone))
+                && Object.Equals(FlattenedStone, move.FlattenedStone)
                 && ((GrabbedStack == null && move.GrabbedStack == null)
-                              || GrabbedStack.Equals(move.GrabbedStack));
+                             || GrabbedStack.Equals(move.GrabbedStack));
         }
 
 

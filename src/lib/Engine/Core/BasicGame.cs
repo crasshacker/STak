@@ -165,6 +165,9 @@ namespace STak.TakEngine
         public virtual void Initialize()
         {
             IsInitialized = true;
+
+            PlayerOne.AI?.OnGameInitiated();
+            PlayerTwo.AI?.OnGameInitiated();
         }
 
 
@@ -329,6 +332,8 @@ namespace STak.TakEngine
 
         protected void MakeValidatedMove(int playerId, IMove move)
         {
+            bool wasCompleted = WasCompleted;
+
             GameTimer.PunchClock(playerId);
             DrawStoneIfAppropriate(move, ActiveReserve);
 
@@ -340,6 +345,12 @@ namespace STak.TakEngine
             ValidateBoard();
             SetGameResult();
             SwitchPlayer();
+
+            if (m_boardExecutor != null && IsCompleted && ! wasCompleted)
+            {
+                PlayerOne.AI?.OnGameCompleted();
+                PlayerTwo.AI?.OnGameCompleted();
+            }
         }
 
 

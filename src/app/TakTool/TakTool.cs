@@ -173,7 +173,7 @@ namespace STak.TakTool
             var player2 = new Player(ai2Name, ai2);
 
             Stopwatch stopwatch = new Stopwatch();
-            var battle = new Battle(battleName, battleDir, force);
+            var battle = new Battle(battleName, battleDir, ai1Name, ai2Name,force);
 
             Stopwatch[] stopwatches = { new Stopwatch(), new Stopwatch() };
 
@@ -188,6 +188,9 @@ namespace STak.TakTool
                 var moveRecords = new List<MoveRecord>();
 
                 VerboseWriter.Write($"Starting game {gameNumber}/{gameCount} - {ai1Name} vs. {ai2Name}.");
+
+                game.Initialize();
+                game.Start();
 
                 for (int ply = 0; ! game.IsCompleted; ply++)
                 {
@@ -236,6 +239,7 @@ namespace STak.TakTool
         private class Battle
         {
             public string             Name     { get; private set; }
+            public string[]           Players  { get; private set; }
             public string             Location { get; private set; }
             public List<BattleResult> Results  { get; private set; } = new List<BattleResult>();
 
@@ -245,10 +249,11 @@ namespace STak.TakTool
             }
 
 
-            public Battle(string name, string location, bool force = false)
+            public Battle(string name, string location, string player1Name, string player2Name, bool force = false)
             {
                 Name     = name;
                 Location = location;
+                Players  = new [] { player1Name, player2Name };
 
                 if (Name != null)
                 {
@@ -279,12 +284,47 @@ namespace STak.TakTool
             {
                 if (Name != null)
                 {
+                    int ties = 0;
+                    var wins = new Dictionary<string, int>();
+                    string pathName;
+
+                    wins[Players[Player.One]] = 0;
+                    wins[Players[Player.Two]] = 0;
+
                     for (int i = 0; i < Results.Count; ++i)
                     {
                         var result = Results[i];
-                        string pathName = Path.Combine(Location, $"{Name}-Battle-{(i+1):D2}.ptn");
+                        pathName = Path.Combine(Location, $"{Name}-Battle-{(i+1):D2}.ptn");
                         File.WriteAllText(pathName, PtnParser.ToString(result.GameRecord));
+
+                        if (result.Result.Winner == Player.One || result.Result.Winner == Player.Two)
+                        {
+                            wins[Players[result.Result.Winner]]++;
+                        }
+                        else
+                        {
+                            ties++;
+                        }
                     }
+
+                    string player1Name = Players[Player.One];
+                    string player2Name = Players[Player.Two];
+
+                    int player1Wins   = wins[player1Name];
+                    int player2Wins   = wins[player2Name];
+                    int player1Losses = Results.Count - (player1Wins + ties);
+                    int player2Losses = Results.Count - (player2Wins + ties);
+
+                    string winnerName = (player1Wins > player2Wins) ? player1Name
+                                      : (player2Wins > player1Wins) ? player2Name
+                                                                    : "Draw (Tie)";
+
+                    string message = $"Overall winner: {winnerName}\n"
+                                   + $"{player1Name} wins/losses/draw: {player1Wins}/{player1Losses}/{ties}\n"
+                                   + $"{player2Name} wins/losses/draw: {player2Wins}/{player2Losses}/{ties}\n";
+
+                    pathName = Path.Combine(Location, $"{Name}-Results.txt");
+                    File.WriteAllText(pathName, message);
                 }
             }
         }
@@ -406,7 +446,7 @@ namespace STak.TakTool
         [Verb("battle", HelpText="Battle two AIs against one another in a series of games.")]
         public class BattleOptions
         {
-            [Option(Default=null)]
+            [Option(Required=true)]
             public string Name { get; set; }
 
             [Option(SetName="shorthand", Default=null)]
@@ -433,7 +473,7 @@ namespace STak.TakTool
             [Option(SetName="longhand", Default=0)]
             public int AI2MaxThinkingTime { get; set; }
 
-            [Option(Default=5, Required=true)]
+            [Option(Default=5, Required=false)]
             public int BoardSize { get; set; }
 
             [Option(Default=1)]

@@ -55,6 +55,7 @@ namespace STak.WinTak
         private static string   ActorSystemAddress       => UIAppConfig.Framework.ActorSystemAddress;
         private static string[] WinGameSounds            => UIAppConfig.Sounds.WinGame;
         private static string[] LoseGameSounds           => UIAppConfig.Sounds.LoseGame;
+        private static string[] DrawGameSounds           => UIAppConfig.Sounds.DrawGame;
 
         private static MainWindow s_mainWindow;
 
@@ -781,12 +782,12 @@ namespace STak.WinTak
                     }
                 }
 
-                s_logger.Debug($"Game over: Player {playerNumber} ({winningPlayer}) wins!, "
-                                                + $"Win type is {winType}, score is {score}");
+                s_logger.Info($"Game over: Player {playerNumber} ({winningPlayer}) wins!, "
+                                               + $"Win type is {winType}, score is {score}");
             }
-            else
+            else if (player1.IsLocalHuman || player2.IsLocalHuman)
             {
-                MessageBox.Show("Game over: The game is a draw.");
+                AudioPlayer.PlaySound(DrawGameSounds[new Random().Next(DrawGameSounds.Length)]);
             }
 
             _ = m_tableView.AnimateGameOver();
@@ -1504,6 +1505,7 @@ namespace STak.WinTak
         private void HandleGameStarted(object sender, GameStartedEventArgs e)
         {
             s_logger.Debug("=> GameStarted");
+            s_logger.Info($"Game Id={m_game.Id} has started.");
             m_bitBoardLogger.LogGameStarted(m_game);
             m_gameMoveLogger.LogGameStarted(m_game);
             s_logger.Debug("<= GameStarted");

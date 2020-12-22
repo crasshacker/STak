@@ -164,7 +164,7 @@ namespace STak.TakEngine
                     move = await SearchForMove(AI, Game as IGame, m_cancelTokenSource.Token);
 
                     stopwatch.Stop();
-                    s_logger.Info($"Search complete after {stopwatch.Elapsed.ToString()} seconds.");
+                    s_logger.Info($"Player {Id+1} search complete after {stopwatch.Elapsed.ToString()} seconds.");
                 }
                 catch (OperationCanceledException)
                 {

@@ -12,6 +12,8 @@ namespace STak.TakEngine
 
     public class Reserve
     {
+        private IReserveStoneSelector m_selector;
+
         public readonly int BoardSize;
 
         public List<Stone> Stones    { get; init; }
@@ -27,6 +29,8 @@ namespace STak.TakEngine
             Player    = player;
             BoardSize = boardSize;
             StoneType = stoneType;
+
+            m_selector = new CellAlignedStackReserveStoneSelector();
 
             int baseIndex  = GetBaseIndex();
             int stoneCount = StartingStoneCount;
@@ -84,8 +88,7 @@ namespace STak.TakEngine
 
             if (stoneId == -1)
             {
-                var selector = new CellAlignedStackReserveStoneSelector();
-                stone = selector.SelectAccessibleStone(this);
+                stone = m_selector.SelectAccessibleStone(this);
 
                 if (stone != null)
                 {

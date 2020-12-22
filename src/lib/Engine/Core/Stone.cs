@@ -16,9 +16,9 @@ namespace STak.TakEngine
     [Serializable]
     public class Stone
     {
-        public int       Id       { get; init; }
+        public int       Id       { get; private set; }
         public int       PlayerId { get; init; }
-        public StoneType Type     { get; set;  }
+        public StoneType Type     { get; set; }
 
 
         public Stone()

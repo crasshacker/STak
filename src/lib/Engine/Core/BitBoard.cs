@@ -558,37 +558,13 @@ namespace STak.TakEngine
             {
                 BitBoard bitBoard = obj as BitBoard;
 
-                if (m_size           == bitBoard.m_size          &&
-                    m_white          == bitBoard.m_white         &&
-                    m_black          == bitBoard.m_black         &&
-                    m_standing       == bitBoard.m_standing      &&
-                    m_cap            == bitBoard.m_cap           &&
-                    m_stacks.Length  == bitBoard.m_stacks.Length &&
-                    m_heights.Length == bitBoard.m_heights.Length)
-                {
-                    isEqual = true;
-
-                    for (int i = 0; i < m_heights.Length; ++i)
-                    {
-                        if (m_heights[i] != bitBoard.m_heights[i])
-                        {
-                            isEqual = false;
-                            break;
-                        }
-                    }
-
-                    if (isEqual)
-                    {
-                        for (int i = 0; i < m_stacks.Length; ++i)
-                        {
-                            if (m_stacks[i] != bitBoard.m_stacks[i])
-                            {
-                                isEqual = false;
-                                break;
-                            }
-                        }
-                    }
-                }
+                isEqual = m_size     == bitBoard.m_size
+                       && m_white    == bitBoard.m_white
+                       && m_black    == bitBoard.m_black
+                       && m_standing == bitBoard.m_standing
+                       && m_cap      == bitBoard.m_cap
+                       && m_heights  .SequenceEqual(bitBoard.m_heights)
+                       && m_stacks   .SequenceEqual(bitBoard.m_stacks);
             }
 
             return isEqual;
@@ -597,18 +573,21 @@ namespace STak.TakEngine
 
         public override int GetHashCode()
         {
-            ulong hash = (ulong)m_size * 1 + m_white * 2 + m_black * 3 + m_standing * 4 + m_cap * 5;
-
-            foreach (byte height in m_heights)
+            unchecked // Overflow is fine, just wrap.
             {
-                hash += height;
-            }
-            foreach (ulong stack in m_stacks)
-            {
-                hash += stack;
-            }
+                ulong hash = (ulong)m_size + m_white * 3 + m_black * 7 + m_standing * 11 + m_cap * 13;
 
-            return (int)hash;
+                foreach (byte height in m_heights)
+                {
+                    hash += height;
+                }
+                foreach (ulong stack in m_stacks)
+                {
+                    hash += stack;
+                }
+
+                return (int)hash;
+            }
         }
 
 
@@ -855,7 +834,7 @@ namespace STak.TakEngine
         }
 
 
-        private struct BitBoardMaskSet
+        private class BitBoardMaskSet
         {
             public ulong Left   { get; private set; }
             public ulong Right  { get; private set; }

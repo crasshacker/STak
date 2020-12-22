@@ -685,11 +685,13 @@
         //
         // winGame
         // loseGame
+        // drawGame
         //
         // The sound played when you win or lose a game.
         //
         "winGame"        : [ "Clapping.wav", "OhYeah.wav", "Woohoo.wav" ],
         "loseGame"       : [ "OhNo.wav" ],
+        "drawGame"       : [ "Meh.wav" ],
 
         //
         // standingStone
@@ -714,7 +716,7 @@
             // Increasing this value will increase AI thinking time significantly, especially on larger board
             // sizes.  You have been warned!
             //
-            "treeEvaluationDepth" : 3,
+            "treeEvaluationDepth" : 4,
 
             //
             // maximumThinkingTime
@@ -775,7 +777,7 @@
             // Increasing this value will increase AI thinking time significantly, especially on larger board
             // sizes.  You have been warned!
             //
-            "treeEvaluationDepth" : 3,
+            "treeEvaluationDepth" : 4,
 
             //
             // maximumThinkingTime
@@ -826,7 +828,23 @@
             // the AI will always choose the same moves, assuming its opponent does the same.  This is primarily for
             // debugging purposes (to get identical AI behavior over multiple runs).
             //
-            "randomizationSeed" : 0
+            "randomizationSeed" : 0,
+
+            //
+            // useTranspositionTable
+            //
+            // A Boolean value indicating whether a transposition table should be used to speed up move searches by
+            // caching scores for board states previously encountered.
+            //
+            "useTranspositionTable" : true,
+
+            //
+            // searchNullWindow
+            //
+            // A Boolean value indicating whether a "null window" should be probed prior to doing a complete alpha/beta
+            // subtree search, so that the complete search can be avoided if the probe is successful.
+            //
+            "searchNullWindow" : true
         }
     }
 }

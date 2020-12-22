@@ -11,6 +11,8 @@ namespace STak.TakEngine.AI
         private static TakAIOptions s_defaultOptions { get; set; } = new TakAIOptions();
         private        TakAIOptions s_options;
 
+        private Minimaxer m_minimaxer;
+
         public string       Name    => "The Experiment"; 
         public TakAIOptions Options { get => s_options ?? s_defaultOptions;
                                       set => s_options = value; }
@@ -19,21 +21,25 @@ namespace STak.TakEngine.AI
 
         public ExperimentalTakAI()
         {
+            m_minimaxer = new IterativeDeepeningMinimaxer(new MoveEnumerator(), new BoardEvaluator());
         }
 
 
-        //
-        // This method should not be changed unless you know what you're doing, which you almost surely don't.
-        //
         public IMove ChooseNextMove(IBasicGame game, CancellationToken token)
         {
-            Minimax minimax = new Minimax(game, new BoardEvaluator());
-            return minimax.Analyze(Options.TreeEvaluationDepth,
-                                   Options.EvaluateCellsRandomly,
-                                   Options.RandomizationSeed,
-                                   Options.EvaluateMovesInParallel,
-                                   Options.CpuCoreUsagePercentage,
-                                   token);
+            return m_minimaxer.ChooseMove(game, Options, token);
+        }
+
+
+        public void OnGameInitiated()
+        {
+            m_minimaxer.Initialize();
+        }
+
+
+        public void OnGameCompleted()
+        {
+            m_minimaxer.LogResults();
         }
 
 
@@ -61,11 +67,11 @@ namespace STak.TakEngine.AI
                 {
                     if (game.Result.Winner == playerId)
                     {
-                        score = Minimax.MaxValue-1;
+                        score = TakAI.WinValue;
                     }
                     else if (game.Result.Winner == 1-playerId)
                     {
-                        score = Minimax.MinValue+1;
+                        score = TakAI.LossValue;
                     }
                 }
                 else

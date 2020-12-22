@@ -483,6 +483,7 @@ namespace STak.WinTak
             if (! AnimateBoard)
             {
                 transform.Children[1] = new RotateTransform3D(new QuaternionRotation3D(endState));
+                ResetView(false);
             }
             else
             {
@@ -1997,6 +1998,13 @@ namespace STak.WinTak
 
                 if (moveType == AnimationType.MakeMove)
                 {
+                    if (stoneMove.Stone.Id == -1)
+                    {
+                        // If this is a StoneMove that was chosen by an AI it might not yet have a particular
+                        // (unique) stone assigned to it.  In this case we draw a stone from a reserve here.
+                        var stone = m_game.Reserves[m_game.ActiveReserve].DrawStone(stoneMove.Stone.Type);
+                        stoneMove = new StoneMove(stoneMove.TargetCell, stone);
+                    }
                     stoneModel = ReserveModels[m_game.ActiveReserve].DrawStoneModel(stoneMove.Stone.Id);
                 }
                 else if ((moveType == AnimationType.UndoMove)
