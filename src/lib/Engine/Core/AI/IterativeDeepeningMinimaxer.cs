@@ -35,6 +35,8 @@ namespace STak.TakEngine.AI
                 return null;
             }
 
+            Initialize();
+
             IBoard        board     = game.BitBoard;
             int           turn      = game.ActiveTurn;
             int           playerId  = game.ActivePlayer.Id;
@@ -72,14 +74,14 @@ namespace STak.TakEngine.AI
             var metricsList = new MinimaxMetrics[maxDepth];
             EvaluationResult evaluationResult = new EvaluationResult(null, MinValue);
 
-            int entryCount = m_transpositionTable.Count;
-            m_transpositionTable.AgeAndRemoveDeadEntries();
-            s_logger.Info($"Pruned transposition table: {entryCount} => {m_transpositionTable.Count}.");
-
             try
             {
                 for (int depth = 1; depth <= maxDepth; ++depth)
                 {
+                    int entryCount = m_transpositionTable.Count;
+                    m_transpositionTable.AgeAndRemoveDeadEntries();
+                    s_logger.Info($"Pruned transposition table: {entryCount} => {m_transpositionTable.Count}.");
+
                     var pvCurrent = new Variation(maxDepth);
 
                     metricsList[depth-1] = new MinimaxMetrics(playerId, depth);
@@ -273,9 +275,10 @@ namespace STak.TakEngine.AI
                     value = - Analyze(game, maximizer, ! maximize, maxDepth, depth-1, -alpha-1, -alpha, cells,
                                                          pvPrimary, pvTemp, options, taskData, metrics, token);
 
-                    if (value > alpha && value < beta)
+                    if (alpha < value && value < beta)
                     {
                         metrics.NullWindowFailCount[depthIndex]++;
+                        // Would it be better/correct to pass -value rather than -alpha here?
                         value = - Analyze(game, maximizer, ! maximize, maxDepth, depth-1, -beta, -alpha, cells,
                                                               pvPrimary, pv, options, taskData, metrics, token);
                     }
@@ -289,18 +292,19 @@ namespace STak.TakEngine.AI
                 game.UndoMove(Player.None);
                 ValidateSavedBitBoard(game.BitBoard, taskData, depth);
 
-                EvaluationResult currentResult = new EvaluationResult(move, value);
+                int oldAlpha = alpha;
+                alpha = Math.Max(alpha, value);
 
-                if (currentResult.Value > bestResult.Value)
+                EvaluationResult currentResult = new EvaluationResult(move, value);
+                UpdateEvaluationResult(ref bestResult, currentResult, false);
+
+                if (alpha > oldAlpha)
                 {
                     raisedAlpha = true;
                     pvCurrent.Set(currentResult, pv);
                 }
 
-                UpdateEvaluationResult(ref bestResult, currentResult, false);
-                alpha = Math.Max(alpha, bestResult.Value);
-
-                if (bestResult.Value >= beta || token.IsCancellationRequested)
+                if (alpha >= beta || token.IsCancellationRequested)
                 {
                     break;
                 }

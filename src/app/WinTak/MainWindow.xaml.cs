@@ -46,6 +46,7 @@ namespace STak.WinTak
 
         private static bool     AutoReload               => UIAppConfig.AutoReload;
         private static int      MoveAnimationTime        => UIAppConfig.Appearance.Animation.MoveAnimationTime;
+        private static double   InitialMoveAnimationRate => UIAppConfig.Appearance.Animation.InitialMoveAnimationRate;
         private static int      HintAnimationPauseTime   => UIAppConfig.Appearance.Animation.HintAnimationPauseTime;
         private static string   DetachGameUponCompletion => UIAppConfig.Behavior.DetachGameUponCompletion;
         private static bool     AllowUnsafeOperations    => UIAppConfig.Behavior.AllowUnsafeOperations;
@@ -147,6 +148,9 @@ namespace STak.WinTak
 
             // Tell AI players how to fetch the animation time.  Yes, this is ugly.
             Player.MoveAnimationTime = (p) => MoveAnimationTime;
+
+            // Adjust the initial position of the animation rate slider.
+            m_tableView.MoveAnimationRate = InitialMoveAnimationRate / 100.0;
 
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             this.ContentRendered += ContentRenderedEventHandler;
@@ -585,6 +589,8 @@ namespace STak.WinTak
 
                 InteropAppConfig.Refresh();
                 UIAppConfig.Refresh();
+
+                InitializeAIOptions();
 
                 // Restore the speed factor saved above.
                 MoveAnimation.SetAnimationSpeed(speed);

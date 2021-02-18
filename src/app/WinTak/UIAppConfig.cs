@@ -131,6 +131,7 @@ namespace STak.WinTak
             public int    BoardZoomAnimationTime    { get; set; }
             public int    BoardResetAnimationTime   { get; set; }
             public int    MoveAnimationTime         { get; set; }
+            public double InitialMoveAnimationRate  { get; set; }
             public int    HintAnimationPauseTime    { get; set; }
             public double AnimationSpeedFactor      { get; set; }
         }

@@ -114,6 +114,26 @@ namespace STak.WinTak
             };
         }
 
+
+        public double MoveAnimationRate // Will be forcefully clamped to [0.0, 1.0] when set
+        {
+            set
+            {
+                double clamped = Math.Max(Math.Min(value, 1.0), 0.0);
+                double range = m_animationSpeed.Maximum - m_animationSpeed.Minimum;
+                double adjustedValue = m_animationSpeed.Maximum - (range * clamped);
+                m_animationSpeed.Value = adjustedValue;
+            }
+
+            get
+            {
+                double range = m_animationSpeed.Maximum - m_animationSpeed.Minimum;
+                return 1.0 - (m_animationSpeed.Value / range);
+            }
+
+        }
+
+
         public void Observe(IEventBasedGameActivityTracker tracker)
         {
             tracker.GameCreated    += HandleGameCreated;

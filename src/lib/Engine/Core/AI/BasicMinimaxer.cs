@@ -27,6 +27,8 @@ namespace STak.TakEngine.AI
                 return null;
             }
 
+            Initialize();
+
             IBoard        board     = game.BitBoard;
             int           turn      = game.ActiveTurn;
             int           playerId  = game.ActivePlayer.Id;

@@ -421,6 +421,14 @@
             "moveAnimationTime" : 1000,
 
             //
+            // initialMoveAnimationRate
+            //
+            // The initial setting of the animation rate slider, expressed as a percentage of the maximum value
+            // of the slider (rightmost point).
+            //
+            "initialMoveAnimationRate" : 50,
+
+            //
             // hintAnimationPauseTime
             //
             // When the user asks for a hint, a move is chosen by an AI and the move animated, after which
