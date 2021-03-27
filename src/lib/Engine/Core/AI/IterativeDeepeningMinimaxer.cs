@@ -278,8 +278,7 @@ namespace STak.TakEngine.AI
                     if (alpha < value && value < beta)
                     {
                         metrics.NullWindowFailCount[depthIndex]++;
-                        // Would it be better/correct to pass -value rather than -alpha here?
-                        value = - Analyze(game, maximizer, ! maximize, maxDepth, depth-1, -beta, -alpha, cells,
+                        value = - Analyze(game, maximizer, ! maximize, maxDepth, depth-1, -beta, -value, cells,
                                                               pvPrimary, pv, options, taskData, metrics, token);
                     }
                     else

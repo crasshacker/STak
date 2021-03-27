@@ -718,7 +718,17 @@
         "Dinkum Thinkum" :
         {
             //
-            // treeEvaluaionDepth
+            // minimaxer
+            //
+            // The alpha-beta minimax implementation to be used.  Must be either "basic" or "experimental".
+            //
+            // NOTE: The experimental minimaxer is, obviously, experimental.  It does not yet work properly,
+            //       producing worse move choices (game losses) than the basic minimaxer.  I don't know why. :-(
+            //
+            "minimaxer" : "basic",
+
+            //
+            // treeEvaluationDepth
             //
             // The depth of the AI search tree evaluated by the minimax algorithm with alpha-beta pruning.
             // Increasing this value will increase AI thinking time significantly, especially on larger board
@@ -773,11 +783,43 @@
             // the AI will always choose the same moves, assuming its opponent does the same.  This is primarily for
             // debugging purposes (to get identical AI behavior over multiple runs).
             //
-            "randomizationSeed" : 0
+            "randomizationSeed" : 0,
+
+            //
+            // useTranspositionTable
+            //
+            // A Boolean value indicating whether a transposition table should be used to speed up move searches by
+            // caching scores for board states previously encountered.
+            //
+            // NOTE: This setting is not yet implemented properly.
+            // NOTE: This setting is used only by the experimental minimaxer.
+            //
+            // "useTranspositionTable" : true,
+
+            //
+            // searchNullWindow
+            //
+            // A Boolean value indicating whether a "null window" should be probed prior to doing a complete alpha/beta
+            // subtree search, so that the complete search can be avoided if the probe is successful.
+            //
+            // NOTE: This setting is not yet working properly.
+            // NOTE: This setting is used only by the experimental minimaxer.
+            //
+            // "searchNullWindow" : true
         },
 
         "The Experiment" :
         {
+            //
+            // minimaxer
+            //
+            // The alpha-beta minimax implementation to be used.  Must be either "basic" or "experimental".
+            //
+            // NOTE: The experimental minimaxer is, obviously, experimental.  It does not yet work properly,
+            //       producing worse move choices (game losses) than the basic minimaxer.  I don't know why. :-(
+            //
+            "minimaxer" : "experimental",
+
             //
             // treeEvaluaionDepth
             //

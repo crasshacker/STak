@@ -25,8 +25,8 @@ namespace STak.WinTak
 
     public abstract class MoveAnimation : PathAnimation
     {
-        // TODO - We should use Board.Width to define this value.
-        public static readonly int DefaultMoveTime = 1000;
+        // TODO - We should use BoardModel.Width to define this value.
+        private const int DefaultMoveTime = 1000;
 
         public new static bool IsActive => s_activeMoveAnimationCount > 0;
         public     static bool IsEnabled { get; set; } = true;

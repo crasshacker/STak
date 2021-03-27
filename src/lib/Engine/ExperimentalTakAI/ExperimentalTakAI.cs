@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 
@@ -21,7 +22,6 @@ namespace STak.TakEngine.AI
 
         public ExperimentalTakAI()
         {
-            m_minimaxer = new IterativeDeepeningMinimaxer(new MoveEnumerator(), new BoardEvaluator());
         }
 
 
@@ -33,6 +33,12 @@ namespace STak.TakEngine.AI
 
         public void OnGameInitiated()
         {
+            string name = Options.Minimaxer ?? "basic";
+
+            // NOTE: Don't raise an error if name is unknown; default to the basic minimaxer.
+            m_minimaxer = String.Equals(name, "experimental", StringComparison.OrdinalIgnoreCase)
+                        ? new IterativeDeepeningMinimaxer(new MoveEnumerator(), new BoardEvaluator())
+                        : new BasicMinimaxer(new MoveEnumerator(), new BoardEvaluator());
             m_minimaxer.Initialize();
         }
 

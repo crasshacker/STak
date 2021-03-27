@@ -931,7 +931,7 @@ namespace STak.WinTak
         {
             if (m_game?.IsStarted == true && m_game.ActivePlayer.IsLocalHuman)
             {
-                if (m_game.IsMoveInProgress)
+                if (m_game.IsMoveInProgress && ! MoveAnimation.IsActive)
                 {
                     ExecuteHitTest(MoveStoneHitTestCallback);
                 }
@@ -959,7 +959,7 @@ namespace STak.WinTak
         {
             if (! m_game.IsCompleted)
             {
-                if (IsStoneModelHit())
+                if (! MoveAnimation.IsActive && IsStoneModelHit())
                 {
                     StoneModel stoneModel = m_tableModel.StoneModels.SingleOrDefault(s => m_modelHitByCursor == s.Model);
                     bool isStoneInStack = false;
