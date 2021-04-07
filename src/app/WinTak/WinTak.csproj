@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -20,8 +20,8 @@
     <None Remove="TakHubWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.94" />
-    <PackageReference Include="NodaTime" Version="3.0.1" />
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.97" />
+    <PackageReference Include="NodaTime" Version="3.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\Engine\Core\TakEngine.csproj" />

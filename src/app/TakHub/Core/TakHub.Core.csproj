@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>STak.TakHub.Core</AssemblyName>
     <RootNamespace>STak.TakHub.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="autofac" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0-rc.2.20475.6" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.2.20475.5" />
+    <PackageReference Include="autofac" Version="6.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0-preview.2.21154.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="6.0.0-preview.2.21154.6" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
   </ItemGroup>
 
