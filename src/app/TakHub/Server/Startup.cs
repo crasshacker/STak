@@ -77,6 +77,8 @@ namespace STak.TakHub
     {
         private static readonly NLog.Logger s_logger = LogManager.GetCurrentClassLogger();
 
+        private const string DatabaseMigrationsAssembly = "STak.TakHub.Infrastructure";
+
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -204,7 +206,7 @@ namespace STak.TakHub
 
         private void ConfigureDatabaseServices(IServiceCollection services)
         {
-            string databaseProvider = (Configuration["databaseProvider"] ?? "sqlServer").ToLower();
+            string databaseProvider = (Configuration["databaseProvider"] ?? "sqlite").ToLower();
 
             if (databaseProvider == "sqlite")
             {
@@ -419,10 +421,10 @@ namespace STak.TakHub
             where TContext : DbContext
         {
             string fileName = null;
-            string connectStr = Configuration.GetConnectionString(context);
+            string connectionString = Configuration.GetConnectionString(context);
 
-            var match = Regex.Match(connectStr, "(?<prefix>.*)DataSource=(?<filename>[^;]*)(?<suffix>.*)",
-                                                                                 RegexOptions.IgnoreCase);
+            var match = Regex.Match(connectionString, "(?<prefix>.*)DataSource=(?<filename>[^;]*)(?<suffix>.*)",
+                                                                                        RegexOptions.IgnoreCase);
             if (match.Success)
             {
                 fileName = match.Groups["filename"].Value;
@@ -431,7 +433,7 @@ namespace STak.TakHub
                     fileName = Path.Combine(Program.GetDatabaseDirectory(), fileName);
                     string prefix = match.Groups["prefix"].Value;
                     string suffix = match.Groups["suffix"].Value;
-                    connectStr = $"{prefix}DataSource={fileName}{suffix}";
+                    connectionString = $"{prefix}DataSource={fileName}{suffix}";
                 }
 
                 string databaseDir = Path.GetDirectoryName(fileName);
@@ -440,21 +442,17 @@ namespace STak.TakHub
                     Directory.CreateDirectory(databaseDir);
                 }
             }
-
-            string migrationAssembly = "STak.TakHub.Infrastructure";
-            services.AddDbContext<TContext>(options => options.UseSqlite(connectStr,
-                                        b => b.MigrationsAssembly(migrationAssembly)));
+            services.AddDbContext<TContext>(options =>
+                options.UseSqlite(connectionString, b => b.MigrationsAssembly(DatabaseMigrationsAssembly)));
         }
 
 
         private void AddSqlServerContext<TContext>(IServiceCollection services, string context)
             where TContext : DbContext
         {
-            string migrationAssembly = Assembly.GetExecutingAssembly().FullName;
-            string connectionString = Configuration.GetConnectionString(context);
-
             services.AddDbContext<TContext>(options =>
-                options.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationAssembly)));
+                options.UseSqlServer(Configuration.GetConnectionString(context),
+                         b => b.MigrationsAssembly(DatabaseMigrationsAssembly)));
         }
     }
 }
