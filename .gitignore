@@ -12,8 +12,8 @@ LOCAL/
 # VS Code
 .ionide
 
-# Database migrations
-Migrations/
+# Database migration Backups
+MigrationsBackup/
 
 # User-specific files
 *.suo
