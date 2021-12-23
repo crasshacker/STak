@@ -783,7 +783,7 @@
             // the AI will always choose the same moves, assuming its opponent does the same.  This is primarily for
             // debugging purposes (to get identical AI behavior over multiple runs).
             //
-            "randomizationSeed" : 0,
+            "randomizationSeed" : 0
 
             //
             // useTranspositionTable

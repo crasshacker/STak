@@ -57,8 +57,7 @@ namespace STak.TakHub.IntegrationTests
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "An error occurred seeding the " +
-                        "database with test messages. Error: {ex.Message}");
+                    logger.LogError(ex, $"Error while seeding the database with test messages. Error: {ex.Message}");
                 }
             });
         }

@@ -37,8 +37,8 @@ namespace STak.TakHub.Interop
 
         public HubGameType(int mask)
         {
-            Validate();
             Mask = mask;
+            Validate();
         }
 
 
@@ -99,9 +99,9 @@ namespace STak.TakHub.Interop
 
         private void Validate()
         {
-            if ((Mask != Any) && (((Mask & (Public | Private)) == 0) || ((Mask & (Ranked | Unranked)) == 0)))
+            if ((Mask != Any) && (IsPublic != IsPrivate) && (IsRanked != IsUnranked))
             {
-                throw new Exception("Game type must be Public and/or Private, and Ranked and/or Unranked.");
+                throw new Exception("Game type must be either Public or Private, and either Ranked or Unranked.");
             }
         }
     }

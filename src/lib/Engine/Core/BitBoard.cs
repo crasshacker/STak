@@ -836,12 +836,12 @@ namespace STak.TakEngine
 
         private class BitBoardMaskSet
         {
-            public ulong Left   { get; private set; }
-            public ulong Right  { get; private set; }
-            public ulong Top    { get; private set; }
-            public ulong Bottom { get; private set; }
-            public ulong Edge   { get; private set; }
-            public ulong Mask   { get; private set; }
+            public ulong Left   { get; private init; }
+            public ulong Right  { get; private init; }
+            public ulong Top    { get; private init; }
+            public ulong Bottom { get; private init; }
+            public ulong Edge   { get; private init; }
+            public ulong Mask   { get; private init; }
 
 
             public BitBoardMaskSet(int boardSize)

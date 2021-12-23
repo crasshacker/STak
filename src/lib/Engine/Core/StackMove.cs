@@ -54,7 +54,7 @@ namespace STak.TakEngine
                 var firstStone = board[cell].TopStone;
                 var finalStone = board[cell.Move(direction, DropCounts.Count)].TopStone;
 
-                if (firstStone.Type == StoneType.Cap && finalStone?.Type == StoneType.Standing)
+                if (firstStone.Type == StoneType.Cap && finalStone.Type == StoneType.Standing)
                 {
                     Debug.Assert(DropCounts.Count > 0 && DropCounts[^1] == 1);
                     FlattenedStone = finalStone;
