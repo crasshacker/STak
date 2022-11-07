@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>STak.TakEngine.Management</AssemblyName>
     <RootNamespace>STak.TakEngine.Management</RootNamespace>
   </PropertyGroup>

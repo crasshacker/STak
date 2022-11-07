@@ -20,15 +20,18 @@ namespace STak.WinTak
 {
     public partial class AppearanceDialog : Window
     {
-        private const  string c_imageFileNameFilter = "Image Files|*.png;*.jpg;*.gif;*.bmp|All Files|*.*";
+        private const string c_imageFileNameFilter = "Image Files|*.png;*.jpg;*.gif;*.bmp|All Files|*.*";
         private static string s_savedImageDirectory;
 
         private readonly Scheme m_initialScheme;
-        private Scheme          m_currentScheme;
+        private Scheme m_currentScheme;
 
-        private Color BackgroundColor => m_colorPicker.SelectedColor.HasValue ? (Color) m_colorPicker.SelectedColor
-                                                                              : Colors.White;
-        private TableView TableView => MainWindow.Instance.TableView;
+
+        private Color BackgroundColor =>
+            OperatingSystem.IsWindowsVersionAtLeast(7, 0) && m_colorPicker.SelectedColor.HasValue
+                                             ? (Color) m_colorPicker.SelectedColor : Colors.White;
+
+        private static TableView TableView => MainWindow.Instance.TableView;
 
 
         public AppearanceDialog()
@@ -38,7 +41,10 @@ namespace STak.WinTak
             m_initialScheme = Scheme.Current.Clone();
             m_currentScheme = Scheme.Current.Clone();
 
-            m_colorPicker.SelectedColorChanged += ColorChangedEventHandler;
+            if (OperatingSystem.IsWindowsVersionAtLeast(7, 0))
+            {
+                m_colorPicker.SelectedColorChanged += ColorChangedEventHandler;
+            }
             this.Closing += ClosingEventHandler;
 
             UpdateControls();
@@ -128,22 +134,28 @@ namespace STak.WinTak
 
         private void ClosingEventHandler(object source, CancelEventArgs e)
         {
-            m_colorPicker.SelectedColorChanged -= ColorChangedEventHandler;
+            if (OperatingSystem.IsWindowsVersionAtLeast(7, 0))
+            {
+                m_colorPicker.SelectedColorChanged -= ColorChangedEventHandler;
+            }
         }
 
 
         private void UpdateControls()
         {
-            m_colorPicker.SelectedColor         = m_currentScheme.BackgroundColor;
-            m_boardTexture.Text                 = m_currentScheme.BoardTextureFile;
-            m_p1StoneTexture.Text               = m_currentScheme.P1StoneTextureFile;
-            m_p2StoneTexture.Text               = m_currentScheme.P2StoneTextureFile;
+            if (OperatingSystem.IsWindowsVersionAtLeast(7, 0))
+            {
+                m_colorPicker.SelectedColor         = m_currentScheme.BackgroundColor;
+                m_boardTexture.Text                 = m_currentScheme.BoardTextureFile;
+                m_p1StoneTexture.Text               = m_currentScheme.P1StoneTextureFile;
+                m_p2StoneTexture.Text               = m_currentScheme.P2StoneTextureFile;
+            }
         }
 
 
         private string GetImageFileNameFromUser()
         {
-            OpenFileDialog dialog = new OpenFileDialog
+            OpenFileDialog dialog = new()
             {
                 Filter = c_imageFileNameFilter,
                 InitialDirectory = s_savedImageDirectory ?? App.GetImageDirectoryName()

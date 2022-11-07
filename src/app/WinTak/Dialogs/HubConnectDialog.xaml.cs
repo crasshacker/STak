@@ -46,7 +46,8 @@ namespace STak.WinTak
             {
                 m_allowClose = false;
 
-                string takHubUrl  = $"http://{m_hostname.Text}:{m_port.Text}/takhub";
+                string protocol   = (m_encrypt.IsChecked == true) ? "https" : "http";
+                string takHubUrl  = $"{protocol}://{m_hostname.Text}:{m_port.Text}/takhub";
                 string gameHubUrl = $"{takHubUrl}/gamehub";
 
                 Uri takHubUri, gameHubUri;
@@ -91,12 +92,12 @@ namespace STak.WinTak
                 if (m_register.IsChecked == true)
                 {
                     var authenticator = new Authenticator(takHubUri, userName, password);
-                    Exception ex = await authenticator.RegisterUser(email);
+                    var errorMessage  = await authenticator.RegisterUser(email);
 
-                    if (ex != null)
+                    if (errorMessage != null)
                     {
-                        MessageBox.Show(this, $"Failed to register user \"{userName}\": {ex.Message}", "Error",
-                                                                   MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(this, $"Failed to register user \"{userName}\":\n{errorMessage}", "Error",
+                                                                       MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                 }

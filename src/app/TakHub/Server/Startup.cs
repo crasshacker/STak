@@ -35,6 +35,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using NLog;
 using Swashbuckle.AspNetCore.Swagger;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 #if NEWTONSOFT_JSON_SERIALIZATION
 using Newtonsoft.Json;
@@ -224,7 +225,7 @@ namespace STak.TakHub
             }
             else
             {
-                string message = "You must specify either \"sqlite\" or \"sqlserver\" value for the "
+                const string message = "You must specify either \"sqlite\" or \"sqlserver\" value for the "
                                                                     + "\"databaseProvider\" setting.";
                 s_logger.Error(message);
                 throw new Exception(message);
@@ -360,8 +361,10 @@ namespace STak.TakHub
             services.AddControllers(options =>
             {
                 options.EnableEndpointRouting = false;
-            })
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            });
+            services.AddFluentValidationAutoValidation();
+            services.AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<Startup>();
         }
 
 

@@ -1,7 +1,7 @@
 param
 (
     [Parameter(Mandatory=$false)]
-    [string[]] $TargetFramework = "net5.0"
+    [string[]] $TargetFramework = "net6.0"
 )
 
 $InformationPreference = 'Continue'

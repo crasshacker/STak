@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using STak.TakEngine;
 using STak.TakEngine.AI;
 using STak.TakEngine.Extensions;
 
 namespace STak.TakTool
 {
-    class Program
+    static class Program
     {
         private static Option[] MoveOptions = new Option[]
         {

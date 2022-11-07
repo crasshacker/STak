@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>STak.TakHub.UnitTests</AssemblyName>
     <RootNamespace>STak.TakHub.UnitTests</RootNamespace>
     <IsPackable>false</IsPackable>
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TakHub\TakHub.csproj" />
+    <ProjectReference Include="..\..\app\TakHub\Server\TakHub.csproj" />
   </ItemGroup>
 
 </Project>

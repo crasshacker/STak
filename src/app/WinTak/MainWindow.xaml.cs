@@ -343,7 +343,6 @@ namespace STak.WinTak
 
             ObserveGame(game, GetEventRaisingTracker(game));
             SetControlState();
-            Activate();
         }
 
 
@@ -833,7 +832,7 @@ namespace STak.WinTak
                 new FileInfo(configFile).CopyTo(backupFile, true);
             }
 
-            var process = Process.Start(editor, configFile);
+            var process = Process.Start(editor, '"' + configFile + '"');
             await process.WaitForExitAsync();
 
             try
@@ -1441,7 +1440,7 @@ namespace STak.WinTak
         private void ProjectStatusCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string pathName = App.GetDocumentPathName(c_projectStatusDocument);
-            OpenWebPage(App.ConvertPathNameToUri(pathName));
+            OpenWebPage(App.QuotePath(App.ConvertPathNameToUri(pathName)));
         }
 
 
@@ -1454,7 +1453,7 @@ namespace STak.WinTak
         private void UserGuideCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             string pathName = App.GetDocumentPathName(c_takUserGuideDocument);
-            OpenWebPage(App.ConvertPathNameToUri(pathName));
+            OpenWebPage(App.QuotePath(App.ConvertPathNameToUri(pathName)));
         }
 
 
@@ -1867,7 +1866,7 @@ namespace STak.WinTak
         }
 
 
-        private class BrowserFinder
+        private static class BrowserFinder
         {
             public static string GetDefaultBrowserPath()
             {

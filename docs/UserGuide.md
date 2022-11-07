@@ -31,8 +31,6 @@ The game rules themselves can be found elsewhere online:
 * [Game rules document][7]
 * [Game rules video walkthrough][8]
 
-If you enjoy playing Tak, support the creators by purchasing the physical board game from [Cheapass Games][9]!
-
 ## WinTak User Guide
 
 ### Changing the View
@@ -63,13 +61,14 @@ If you hold down the shift key while moving the mouse over the board, a the name
 to by the mouse cursor is displayed in a small overlay.  When the cursor points at a stone, the overlay indicates the
 stone and model IDs; these are internal game object IDs used purely for debugging purposes.
 
+
 ### Basic Game Mechanics
 
 When WinTak is first started you are immediately placed in a game as Player One on a 5x5 board, playing against an AI
 opponent, so you can make your first move forthwith.  By default the table is rotated so that Player Two's stone
 reserve is in front of you.  After both players have made their first move it is then rotated 180 degress, so that
 your stones are directly in front of you.  (This behavior can be changed through a setting in the configuration file;
-see [Configuration Settings][11] below.) The initial rotation of the table ensures that you don't need to reach
+see [Configuration Settings][9] below.) The initial rotation of the table ensures that you don't need to reach
 over the table to grab one of your opponent's stones on your first move. :-)
 
 The game of Tak allows two types of moves, which I'll refer to here as Stone moves and Stack moves.  A Stone move
@@ -120,7 +119,7 @@ small tooltip showing the number of the move that ended at that position.
 In addition to using the slider, moves can be undone and redone using the Edit=>Undo and Edit=>Redo menu items or
 their keyboard shortcuts (Ctrl-Z and Ctrl-Y).  Unlike when using the slider to undo/redo moves, moves that are
 undone/redone using the menu items or associated shortcuts are animated according to the current move animation
-rate (see [Move Animation][12] below).  This allows you to watch as each individual move is undone or redone.
+rate (see [Move Animation][10] below).  This allows you to watch as each individual move is undone or redone.
 
 Move undo/redo is supported in three scenarios:
 
@@ -301,12 +300,9 @@ framework.  It serves as a hub where WinTak players can meet and play with one a
 the hub.  TakHub is a console application; it has no user interface, browser-based or otherwise.  In order to modify
 the way it runs, you must modify a configuration file.
 
-### Limitations
-
-* TakHub does not support secure connections using HTTPS; only HTTP is supported.
-
-  When creating accounts, users should not reuse any password they use in any of their "real" accounts.  Credentials
-  will be sent to the server in plain text, and could be seen by a malicious actor while in transit.
+Note: When creating accounts, users should not reuse any password they use in any of their "real" accounts.
+Unless the option to encrypt communications is selected when registering a new account or logging into TakHub,
+credentials will be sent to the server in plain text and could be seen by a malicious actor while in transit.
 
 
 ### Configuration
@@ -448,10 +444,8 @@ reached by email at <tak@smokerboy.com>.
 [4]:  <https://www.wikiwand.com/en/Tak_(game)>                                                       "Tak on Wikipedia"
 [5]:  <https://www.reddit.com/r/Tak/comments/3o8fcw/windows_tak_game_with_ai_source_code_available/> "RTak"
 [6]:  <ProjectStatus.html>                                                                           "Project Status"
-[7]:  <https://cheapass.com/wp-content/uploads/2018/04/UniversityRulesSM.pdf>                        "Game Rules"
+[7]:  <https://ustak.org/play-beautiful-game-tak/>                                                   "Game Rules"
 [8]:  <https://youtu.be/iEXkpS-Q9dI>                                                                 "Tak Walkthrough"
-[9]:  <https://cheapass.com/>                                                                        "Cheapass Games"
-[10]: <https://cheapass.com/tak/>                                                                    "Classic Edition"
-[11]: <#configuration-settings>                                                                      "Configuration Settings"
-[12]: <#move-animation>                                                                              "Move Animation"
+[9]: <#configuration-settings>                                                                      "Configuration Settings"
+[10]: <#move-animation>                                                                              "Move Animation"
 

@@ -120,6 +120,12 @@ namespace STak.WinTak
         }
 
 
+        public static string QuotePath(string pathName)
+        {
+            return '"' + pathName + '"';
+        }
+
+
         public static (double, double) GetDisplayScalingFactors()
         {
             var bindingFlags = BindingFlags.NonPublic | BindingFlags.Static;

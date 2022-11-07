@@ -13,7 +13,6 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using NLog;
 using NLog.Web;
-using NLog.Web.AspNetCore;
 using NLog.Extensions.Logging;
 using STak.TakHub.Infrastructure.Data;
 using STak.TakHub.Infrastructure.Identity;
@@ -40,10 +39,7 @@ namespace STak.TakHub
 
             var builder = Host.CreateDefaultBuilder(args)
                 .UseContentRoot(applicationDirectory)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
                 .UseNLog();
 
             // Configure the DI container to be used (and passed to Startup.ConfigureContainer).
@@ -81,9 +77,8 @@ namespace STak.TakHub
 
         private static void InitializeLogging(string[] cmdLineArgs)
         {
-            string prefix = "--Environment=";
-            string env = cmdLineArgs.Where(s => Regex.IsMatch(s, $"^{prefix}", RegexOptions.IgnoreCase))
-                                                                                          .FirstOrDefault();
+            const string prefix = "--Environment=";
+            string env = Array.Find(cmdLineArgs, s => Regex.IsMatch(s, $"^{prefix}", RegexOptions.IgnoreCase));
             if (env != null)
             {
                 env = env[prefix.Length..];
@@ -119,7 +114,7 @@ namespace STak.TakHub
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the App dataabase.");
+                    logger.LogError(ex, "An error occurred creating the App database.");
                 }
             }
 
@@ -135,7 +130,7 @@ namespace STak.TakHub
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the AppIdentity dataabase.");
+                    logger.LogError(ex, "An error occurred creating the AppIdentity database.");
                 }
             }
         }

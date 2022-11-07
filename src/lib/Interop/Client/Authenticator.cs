@@ -34,7 +34,7 @@ namespace STak.TakHub.Client
         }
 
 
-        public async Task<Exception> RegisterUser(string email = null)
+        public async Task<string> RegisterUser(string email = null)
         {
             Exception exception = null;
 
@@ -60,14 +60,23 @@ namespace STak.TakHub.Client
 
             try { response.EnsureSuccessStatusCode(); } catch (Exception ex) { exception = ex; }
 
-            if (exception == null)
+            var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
+            string errorMessage = null;
+
+            if (exception != null)
             {
-                // Verify that if the request was successful the response indicates the same.
-                var payload = JObject.Parse(await response.Content.ReadAsStringAsync());
-                Debug.Assert((bool)payload["success"]);
+                errorMessage = String.Empty;
+                foreach (string value in payload.PropertyValues().Values<string>())
+                {
+                    errorMessage += value + "\r\n";
+                }
+                if (errorMessage == String.Empty)
+                {
+                    errorMessage = "An unknown error occurred.";
+                }
             }
 
-            return exception;
+            return errorMessage;
         }
 
 
