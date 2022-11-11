@@ -8,70 +8,63 @@ using System.Collections.Generic;
 
 namespace STak.TakEngine
 {
-    public static class PtnParser
+    public static partial class PtnParser
     {
-        private static readonly Regex s_moveRegex;
-        private static readonly Regex s_turnRegex;
-        private static readonly Regex s_resultRegex;
+        private const string moveStr = @"^\s*"
+                                     + @"(?<stoneCount>\d+)?"       // Optional stone count
+                                     + @"(?<stoneType1>[FSC])?"     // Optional stone type
+                                     + @"(?<stoneFile>[a-h])"       // File of stone placement or start of move
+                                     + @"(?<stoneRank>[0-9])"       // Rank of stone placement or start of move
+                                     + @"(?<direction>[<>\-\+])?"   // Optional direction, for stone moves only
+                                     + @"(?<dropCounts>\d+)?"       // Optional stones dropped on one or more squares
+                                     + @"(?<stoneType2>[FSC])?"     // Optional type of last stone dropped
+                                     + @"(?<info>[!*?'""]+)?"       // Optional informational marks
+                                     + @"(\s*(?<comment>\{.*\}))?"; // Optional comment
 
-        static PtnParser()
-        {
-            string moveStr = @"^\s*"
-                           + @"(?<stoneCount>\d+)?"       // Optional stone count
-                           + @"(?<stoneType1>[FSC])?"     // Optional stone type
-                           + @"(?<stoneFile>[a-h])"       // File of stone placement or start of move
-                           + @"(?<stoneRank>[0-9])"       // Rank of stone placement or start of move
-                           + @"(?<direction>[<>\-\+])?"   // Optional direction, for stone moves only
-                           + @"(?<dropCounts>\d+)?"       // Optional stones dropped on one or more squares
-                           + @"(?<stoneType2>[FSC])?"     // Optional type of last stone dropped
-                           + @"(?<info>[!*?'""]+)?"       // Optional informational marks
-                           + @"(\s*(?<comment>\{.*\}))?"; // Optional comment
+        private const string turnStr = @"^\s*"
+                                     + @"(?<turnNumber>\d+)\."       // Turn number
+                                     + @"\s+"
+                                     + @"(?<stoneCount1>\d+)?"       // Optional stone count
+                                     + @"(?<stoneType11>[FSC])?"     // Optional stone type
+                                     + @"(?<stoneFile1>[a-h])"       // File of stone placement or start of move
+                                     + @"(?<stoneRank1>[0-9])"       // Rank of stone placement or start of move
+                                     + @"(?<direction1>[<>\-\+])?"   // Optional direction, for stone moves only
+                                     + @"(?<dropCounts1>\d+)?"       // Optional stones dropped on one or more squares
+                                     + @"(?<stoneType12>[FSC])?"     // Optional type of last stone dropped
+                                     + @"(?<info1>[!*?'""]+)?"       // Optional informational marks
+                                     + @"(\s*(?<comment1>\{.*\}))?"  // Optional comment
 
-            string turnStr = @"^\s*"
-                           + @"(?<turnNumber>\d+)\."       // Turn number
-                           + @"\s+"
-                           + @"(?<stoneCount1>\d+)?"       // Optional stone count
-                           + @"(?<stoneType11>[FSC])?"     // Optional stone type
-                           + @"(?<stoneFile1>[a-h])"       // File of stone placement or start of move
-                           + @"(?<stoneRank1>[0-9])"       // Rank of stone placement or start of move
-                           + @"(?<direction1>[<>\-\+])?"   // Optional direction, for stone moves only
-                           + @"(?<dropCounts1>\d+)?"       // Optional stones dropped on one or more squares
-                           + @"(?<stoneType12>[FSC])?"     // Optional type of last stone dropped
-                           + @"(?<info1>[!*?'""]+)?"       // Optional informational marks
-                           + @"(\s*(?<comment1>\{.*\}))?"  // Optional comment
+                                     + @"("                          // Optional Player 2 section (if game not ended)
+                                     + @"\s+"                        // Whitespace
+                                     + @"(?<stoneCount2>\d+)?"       // Optional stone count
+                                     + @"(?<stoneType21>[FSC])?"     // Optional stone type
+                                     + @"(?<stoneFile2>[a-h])"       // File of stone placement or start of move
+                                     + @"(?<stoneRank2>[0-9])"       // Rank of stone placement or start of move
+                                     + @"(?<direction2>[<>\-\+])?"   // Optional direction, for stone moves only
+                                     + @"(?<dropCounts2>\d+)?"       // Optional stones dropped on one or more squares
+                                     + @"(?<stoneType22>[FSC])?"     // Optional type of last stone dropped
+                                     + @"(?<info2>[!*?'""]+)?"       // Optional informational marks
+                                     + @"(\s*(?<comment2>\{.*\}))?"  // Optional comment
+                                     + @")?"                         // End optional player 2 section
 
-                           + @"("                          // Optional Player 2 section (if game not ended)
-                           + @"\s+"                        // Whitespace
-                           + @"(?<stoneCount2>\d+)?"       // Optional stone count
-                           + @"(?<stoneType21>[FSC])?"     // Optional stone type
-                           + @"(?<stoneFile2>[a-h])"       // File of stone placement or start of move
-                           + @"(?<stoneRank2>[0-9])"       // Rank of stone placement or start of move
-                           + @"(?<direction2>[<>\-\+])?"   // Optional direction, for stone moves only
-                           + @"(?<dropCounts2>\d+)?"       // Optional stones dropped on one or more squares
-                           + @"(?<stoneType22>[FSC])?"     // Optional type of last stone dropped
-                           + @"(?<info2>[!*?'""]+)?"       // Optional informational marks
-                           + @"(\s*(?<comment2>\{.*\}))?"  // Optional comment
-                           + @")?"                         // End optional player 2 section
+                                     + @"("                          // Optional Game end section
+                                     + @"\s+"                        // Whitespace
+                                     + @"(?<roadWin>R-0|0-R)?"       // Road win
+                                     + @"(?<flatWin>F-0|0-F)?"       // Flat win
+                                     + @"(?<timeWin>1-0|0-1)?"       // Time win (or resignation)
+                                     + @"(?<draw>1/2-1/2)?"          // Draw
+                                     + @")?";                        // End game end section
 
-                           + @"("                          // Optional Game end section
-                           + @"\s+"                        // Whitespace
-                           + @"(?<roadWin>R-0|0-R)?"       // Road win
-                           + @"(?<flatWin>F-0|0-F)?"       // Flat win
-                           + @"(?<timeWin>1-0|0-1)?"       // Time win (or resignation)
-                           + @"(?<draw>1/2-1/2)?"          // Draw
-                           + @")?";                        // End game end section
+        [GeneratedRegex(moveStr, RegexOptions.ExplicitCapture)]
+        private static partial Regex GetMoveRegex();
+        private static Regex MoveRegex = GetMoveRegex();
 
-            string resultStr = @"("                        // Result header
-                             + @"(?<roadWin>R-0|0-R)?"     // Road win
-                             + @"(?<flatWin>F-0|0-F)?"     // Flat win
-                             + @"(?<timeWin>1-0|0-1)?"     // Time win (or resignation)
-                             + @"(?<draw>1/2-1/2)?"        // Draw
-                             + @")";                       // End game end section
+        [GeneratedRegex(turnStr, RegexOptions.ExplicitCapture)]
+        private static partial Regex GetTurnRegex();
+        private static Regex TurnRegex = GetTurnRegex();
 
-            s_moveRegex   = new Regex(moveStr,   RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-            s_turnRegex   = new Regex(turnStr,   RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-            s_resultRegex = new Regex(resultStr, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-        }
+        private static readonly Regex s_moveRegex = MoveRegex;
+        private static readonly Regex s_turnRegex = TurnRegex;
 
 
         public static GameRecord ParseFile(string fileName)
@@ -217,7 +210,7 @@ namespace STak.TakEngine
         {
             IMove move = null;
 
-            Match match = s_moveRegex.Match(movePtn);
+            Match match = MoveRegex.Match(movePtn);
 
             if (match.Success)
             {
@@ -450,7 +443,7 @@ namespace STak.TakEngine
 
             IMove[] moves = new IMove[2];
 
-            Match match = s_turnRegex.Match(turnPtn);
+            Match match = TurnRegex.Match(turnPtn);
 
             if (match.Success)
             {

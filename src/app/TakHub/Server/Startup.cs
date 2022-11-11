@@ -74,13 +74,17 @@ namespace STak.TakHub
     }
 
 
-    public class Startup
+    public partial class Startup
     {
         private static readonly NLog.Logger s_logger = LogManager.GetCurrentClassLogger();
 
         private const string DatabaseMigrationsAssembly = "STak.TakHub.Infrastructure";
 
         public IConfiguration Configuration { get; }
+
+        [GeneratedRegex("(?<prefix>.*)DataSource=(?<filename>[^;]*)(?<suffix>.*)", RegexOptions.IgnoreCase)]
+        private static partial Regex GetConnectionStringRegex();
+        private static Regex ConnectionStringRegex = GetConnectionStringRegex();
 
         public Startup(IConfiguration configuration)
         {
@@ -426,8 +430,7 @@ namespace STak.TakHub
             string fileName = null;
             string connectionString = Configuration.GetConnectionString(context);
 
-            var match = Regex.Match(connectionString, "(?<prefix>.*)DataSource=(?<filename>[^;]*)(?<suffix>.*)",
-                                                                                        RegexOptions.IgnoreCase);
+            var match = ConnectionStringRegex.Match(connectionString);
             if (match.Success)
             {
                 fileName = match.Groups["filename"].Value;
