@@ -90,6 +90,9 @@ namespace STak.WinTak
 
         internal static bool CanKibitzGame(ActiveGameDescription gameDesc)
         {
+            // FIXIT - Kibitzing itself works, but call to the client to create the game doesn't carry
+            //         the AllowKibitz flag with it; the server doesn't keep track of it properly.
+            //         For now rather than disallowing kibitzing we allow if for everyone.
             return // gameDesc.AllowKibitz &&
                       gameDesc.PlayerOne != TakHubWindow.UserName &&
                       gameDesc.PlayerTwo != TakHubWindow.UserName;
