@@ -183,7 +183,7 @@ namespace STak.WinTak
                 GameInvite oldestInvite = null;
                 Instant    oldestCreate = Instant.MaxValue;
 
-                bool isHumanWaiting = m_activeInviteList.Where(inv => (inv.PlayerName != UserName && ! inv.IsPlayerAI)).Any();
+                bool isHumanWaiting = m_activeInviteList.Any(inv => inv.PlayerName != UserName && ! inv.IsPlayerAI);
 
                 foreach (var inviteDesc in m_activeInviteList)
                 {
@@ -303,7 +303,7 @@ namespace STak.WinTak
                 CanUserInviteGame = ! m_activeInviteList.IsUserInviter;
             }
 
-            m_acceptOldestGame.IsEnabled = m_activeInviteList.Where(inv => (inv.PlayerName != UserName && ! inv.IsPlayerAI)).Any();
+            m_acceptOldestGame.IsEnabled = m_activeInviteList.Any(inv => inv.PlayerName != UserName && !inv.IsPlayerAI);
         }
 
 
@@ -313,7 +313,7 @@ namespace STak.WinTak
             m_activeInviteList.Remove(new ActiveInviteDescription(isUserInviter, e.Invite));
             CanUserInviteGame = ! m_activeInviteList.IsUserInviter;
 
-            m_acceptOldestGame.IsEnabled = m_activeInviteList.Where(inv => (inv.PlayerName != UserName && ! inv.IsPlayerAI)).Any();
+            m_acceptOldestGame.IsEnabled = m_activeInviteList.Any(inv => inv.PlayerName != UserName && !inv.IsPlayerAI);
         }
 
 
@@ -344,7 +344,7 @@ namespace STak.WinTak
         {
             try
             {
-                m_activeGameList.Remove(m_activeGameList.Where(g => g.GameId == e.GameId).Single());
+                m_activeGameList.Remove(m_activeGameList.Single(g => g.GameId == e.GameId));
             }
             catch (Exception ex)
             {
@@ -416,7 +416,7 @@ namespace STak.WinTak
 
     public class ActiveInviteDescriptionList : ObservableCollection<ActiveInviteDescription>
     {
-        public bool IsUserInviter => this.Where(a => a.IsUserInviter).Any();
+        public bool IsUserInviter => this.Any(a => a.IsUserInviter);
     }
 
 
@@ -533,7 +533,7 @@ namespace STak.WinTak
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null && ! (value as ActiveInviteDescription).IsUserInviter;
+            return ! (value as ActiveInviteDescription)?.IsUserInviter;
         }
 
 
