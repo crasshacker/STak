@@ -90,8 +90,9 @@ namespace STak.WinTak
 
         internal static bool CanKibitzGame(ActiveGameDescription gameDesc)
         {
-            return gameDesc.AllowKibitz && gameDesc.PlayerOne != TakHubWindow.UserName
-                                        && gameDesc.PlayerTwo != TakHubWindow.UserName;
+            return // gameDesc.AllowKibitz &&
+                      gameDesc.PlayerOne != TakHubWindow.UserName &&
+                      gameDesc.PlayerTwo != TakHubWindow.UserName;
         }
 
 

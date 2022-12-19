@@ -51,7 +51,7 @@ namespace STak.WinTak
 
             if (quit == true || quit == null)
             {
-                GameInvite invite = new GameInvite();
+                GameInvite invite = new();
                 invite.Opponent.Add(m_invite.Inviter);
                 invite.PlayerNumber.Add(GetPreferredSeat());
                 invite.BoardSize.Add(GetPreferredBoardSize());

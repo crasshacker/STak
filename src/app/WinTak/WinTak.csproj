@@ -10,7 +10,7 @@
     <RootNamespace>STak.WinTak</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>NU1701</NoWarn>
+    <NoWarn>NU1701;RCS1080</NoWarn>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
