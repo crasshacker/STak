@@ -7,6 +7,11 @@
     <Version>1.0.0-alpha.1</Version>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>NU1701;RCS1080;RCS1036</NoWarn>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>STak.TakEngine</PackageId>

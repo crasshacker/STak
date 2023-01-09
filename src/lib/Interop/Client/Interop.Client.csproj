@@ -6,6 +6,11 @@
     <RootNamespace>STak.Interop.Client</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>NU1701;RCS1080;RCS1036</NoWarn>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.0" />

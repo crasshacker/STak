@@ -10,7 +10,7 @@
     <RootNamespace>STak.WinTak</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>NU1701;RCS1080</NoWarn>
+    <NoWarn>NU1701;RCS1080;RCS1036</NoWarn>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
     <PackageReference Include="NodaTime" Version="3.1.5" />
+    <!-- <PackageReference Include="ModernWpfUI" /> -->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\Engine\Core\TakEngine.csproj" />
